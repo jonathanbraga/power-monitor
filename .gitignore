@@ -1,4 +1,4 @@
-/node_modules
+*node_modules
 /npm-debug.log
 
 /test/assets/package-*/
@@ -6,7 +6,7 @@
 /test/reports
 /test/tmp/
 
-/bower.json
+*bower.json
 /component.json
 /bower_components
 /test/sample
