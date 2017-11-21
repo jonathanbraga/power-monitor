@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Novo Cômodo</title>
+  <title>Powe Monitor</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -177,7 +177,7 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="create_comodo.html">Adicionar</a></li>
+            <li><a href="create_comodo.html">Adicionar</a></li>
             <li><a href="list_comodo.html">Listar</a></li>
           </ul>
         </li>
@@ -194,7 +194,7 @@
         </li>
         <li class="header">Principal</li>
         <!-- Optionally, you can add icons to the links -->
-        <li><a href="index.html"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
+        <li class="active"><a href="index.html"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
         <li><a href="relatorio.html"><i class="fa fa-area-chart"></i> <span>Relatórios</span></a></li>            
       </ul>
       <!-- /.sidebar-menu -->
@@ -207,63 +207,19 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Novo Cômodo
+        Home
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content container-fluid">
-
-      <div class="box box-info">
-        <div class="box-header with-border">
-          <h3 class="box-title">Formulário</h3>
-        </div>
-        <form class="form-horizontal" id="form-comodo">
-          <div class="box-body">
-            <div class="form-group">
-              <label for="inputNome" class="col-sm-2 control-label">Nome</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputNome" placeholder="Nome">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputQuantidade" class="col-sm-2 control-label">Quantidade</label>
-              <div class="col-sm-2">
-                  <input type="text" id="inputQuantidade" class="form-control" placeholder="Quantidade"></select>
-              </div>
-              <label for="select-dispositivo" class="col-sm-1 control-label">Dispositivo</label>
-              <div class="col-sm-5">
-                  <select id="select-dispositivo" class="form-control select2" style="width: 100%;"></select>
-              </div>
-              <div class="col-sm-2">
-                <button type="button" class="btn btn-info pull" id="adicionar-dispositivo">Adicionar</button>
-              </div>
-            </div>
+        <!-- Application buttons -->
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Cômodos</h3>
           </div>
-          <div class="box-footer">
-            <button type="submit" class="btn btn-info pull-right">Confirmar</button>            
+          <div class="box-body" id="box-comodos">
           </div>
-        </form>
-      </div>
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Dispositivos Adicionados</h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body no-padding">
-          <table class="table table-striped" id="tabela-dispositivos">
-            <tr>
-              <th>Dispositivo</th>
-              <th>Quantidade</th>
-              <th style="width: 40px">#</th>
-            </tr>
-          </table>
-        </div>
-        <!-- /.box-body -->
-      </div>
-      <!-- /.box -->
-    </div>
-
     </section>
     <!-- /.content -->
   </div>
@@ -290,7 +246,7 @@
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-<script src="js/create/comodo.js"></script>
+<script src="js/home.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

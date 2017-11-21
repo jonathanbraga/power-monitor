@@ -33,31 +33,34 @@ $(document).ready(function(){
       _sqlAdd = "('"+nome+"',"+quantidade+", "+dispositivo_id+")"    
     }    
   });
-  //Remove item da lista
-  (function($) {
-    remove = function(item) {
-      var tr = $(item).closest('tr');		
-      tr.fadeOut(400, function() {
-                  tr.remove();  		    
-      });		
-    return false;		  
-    }		
-  })(jQuery);
 
   //Cadastro - COMODO
   $("#form-comodo").submit(function(e){
-    var sql = "INSERT INTO comodo (nome,quantidade,id_dispositivo) values "+_sqlAdd+" ;";
-    socket.emit("add-comodo", sql);		
+    var nome = $("#inputNome").val();
+    var sql = "INSERT INTO comodo (nome) values ('"+nome+"');";
+    socket.emit("general-sql", sql);		
   });
 
   //List - Comodo
-  socket.on("list-comodos",function(c){    
+  socket.on("get-comodos",function(c){    
     for(i=0; i<c.length;i++)
     {
-      $('#listagem-comodo tr:last').after('<tr><td>'+c[i].nome+'</td><td>'+c[i].comodo+'</td><td>'+c[i].dispositivo+'</td>');      
+      $('#listagem-comodo tr:last').after('<tr><td style="width:8%;"><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this,'+c[i].id+')">Excluir</button></td><td>'+c[i].nome+'</td>');      
     }
     console.log(c);
   });
+
+  (function($) {
+    remove = function(item,comodoItem) {
+      var tr = $(item).closest('tr');		
+      tr.fadeOut(400, function() {
+                  tr.remove();  		    
+      });
+    var sql = "DELETE FROM comodo where id = "+comodoItem+"";
+    socket.emit("general-sql",sql);  
+    return false;		  
+    }		
+  })(jQuery);
 
 });
 
