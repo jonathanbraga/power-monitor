@@ -3,6 +3,7 @@ $(document).ready(function(){
   var ready = false;
   var _sqlAdd;
   var moreone = 0;
+  var _selectedComodoID;
 
   //Recebe todos os dispositivos
   socket.on("get-comodos",function(d){
@@ -30,14 +31,31 @@ $(document).ready(function(){
       else{
         icone = "";
       }
-      $("#box-comodos").append('<a class="comodoClick btn btn-app"><i class="'+icone+'"></i>'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></a>');
+      $("#box-comodos").append('<button class="btn btn-app" type="button" onclick="comodo(this,'+d[i].id+')"><i class="'+icone+'"></i>'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
     }
     console.log(d);
   });
 
-  $(".comodoClick").click(function(){
-    alert("s");
+  // -------------------------------------------------- COMODO SELECIONADO ----------------------------------------------------  
+
+  // Busca todos os dispositivos do comodo
+  socket.on("get-dispositivo",function(d){
+    for(i=0; i<d.length;i++)
+    {
+      $("#box-comodos").append('<button class="btn btn-app" type="button" onclick="comodo(this,'+d[i].id+')"><i class="'+icone+'"></i>'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
+    }
+    console.log(d);
   });
 
+  // General Function
+  (function($) {
+    comodo = function(item,comodoItemID) {
+      var sql = "UPDATE selected_comodo set comodo_id = "+comodoItemID+"";
+      socket.emit("general-sql",sql);
+      window.location.replace("comodo_selected.html");  
+    return false;		  
+    }
+  })(jQuery);
 });
+
 

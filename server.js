@@ -3,6 +3,9 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
 
+//Local variables
+var _selectedComodo;
+
 var clients = {};
 
 var con = mysql.createConnection({
@@ -24,18 +27,29 @@ io.on("connection", function (client) {
         io.emit("get-dispositivos",result)
     });
 
-    ///List Comodos****
-    //var sql_list_comodos = "select comodo.nome, comodo.quantidade as comodo, dispositivo.nome as dispositivo from comodo join dispositivo on comodo.id_dispositivo = dispositivo.id ORDER BY comodo.nome";
+    ///Get Comodos    
     con.query("SELECT DISTINCT* FROM comodo ORDER BY nome", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-comodos",result)
+    });
+
+    //Get Comodo selecionado
+    con.query("SELECT c.id,c.nome from comodo c, selected_comodo sc where c.id = sc.comodo_id", function (err, result, fields){
+        if(err) throw err;
+        io.emit("get-selected-comodo",result);
+    });
+
+    //Get dispositivos do comodo selecionado
+    con.query("SELECT d.id, d.nome FROM selected_comodo sc, comodo_dispositivo cd, dispositivo d WHERE d.id = cd.id_dispositivo and cd.id_comodo = sc.comodo_id", function (err, result, fields){
+        if(err) throw err;
+        io.emit("get-dispositivos-selected-comodo",result);
     });
 
     //Qualquer SQL
     client.on("general-sql", function(sql){
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
-        });        
+        });
     });
 
 });

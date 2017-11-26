@@ -23,7 +23,7 @@ $(document).ready(function(){
     remove = function(item,dispositivoItem) {
       var tr = $(item).closest('tr');		
       tr.fadeOut(400, function() {
-                  tr.remove();  		    
+         tr.remove();  		    
       });
     var sql = "DELETE FROM dispositivo where id = "+dispositivoItem+"";
     socket.emit("general-sql",sql);  

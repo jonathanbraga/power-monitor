@@ -29,3 +29,11 @@ CREATE TABLE status_dispositivo(
    PRIMARY KEY (id),
    foreign key (id_dispositivo) references dispositivo(id) 
 );
+
+CREATE TABLE selected_comodo(
+   id int auto_increment,
+   first_time BOOLEAN,
+   comodo_id int,
+   PRIMARY KEY (id),
+   foreign key (comodo_id) references comodo(id)
+);
