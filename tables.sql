@@ -25,8 +25,10 @@ CREATE TABLE status_dispositivo(
    id int auto_increment,
    estado BOOLEAN,
    id_dispositivo int,
+   id_comodo int,
    PRIMARY KEY (id),
-   foreign key (id_dispositivo) references dispositivo(id) 
+   foreign key (id_dispositivo) references dispositivo(id),
+   foreign key (id_comodo) references comodo(id) 
 );
 
 CREATE TABLE selected_comodo(
