@@ -24,7 +24,6 @@ CREATE TABLE comodo_dispositivo(
 CREATE TABLE status_dispositivo(
    id int auto_increment,
    estado BOOLEAN,
-   data_modificacao DATETIME,
    id_dispositivo int,
    PRIMARY KEY (id),
    foreign key (id_dispositivo) references dispositivo(id) 
@@ -43,6 +42,8 @@ CREATE TABLE status_dispositivo_historico(
    estado BOOLEAN,
    data DATETIME,
    id_dispositivo int,
+   id_comodo int,
    PRIMARY KEY (id),
-   foreign key (id_dispositivo) references dispositivo(id) 	 
+   foreign key (id_dispositivo) references dispositivo(id),
+   foreign key (id_comodo) references comodo(id)	 
 );

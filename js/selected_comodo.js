@@ -57,11 +57,11 @@ $(document).ready(function(){
     $('#tabela-dispositivos tr:last').after('<tr><td>'+dispositivo+'</td><td>'+quantidade+'</td><td><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this)">Excluir</button></td>');
     if(moreone > 1){
       _sqlAdd = _sqlAdd + ",("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = _sqlAddStatus + ",(0,'"+data+"',"+dispositivo_id+")";
+      _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+")";
     }
     else{
       _sqlAdd = "("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = "(0,'"+data+"',"+dispositivo_id+")";
+      _sqlAddStatus = "(0,"+dispositivo_id+")";
     }
     $("#inputQuantidade").val("");
   });
@@ -71,7 +71,7 @@ $(document).ready(function(){
     var sqlAdd = "INSERT INTO comodo_dispositivo (quantidade_dispositivo,id_comodo,id_dispositivo) values "+_sqlAdd+" ;";
     socket.emit("general-sql", sqlAdd);
 
-    var sqlAddStatus = "INSERT INTO status_dispositivo (estado,data_modificacao,id_dispositivo) values "+_sqlAddStatus+" ;";
+    var sqlAddStatus = "INSERT INTO status_dispositivo (estado,id_dispositivo) values "+_sqlAddStatus+" ;";
     socket.emit("general-sql", sqlAddStatus);
 
     location.reload();
@@ -91,7 +91,7 @@ $(document).ready(function(){
     //adiciona o valor em status_dispositivo_historico
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
-    var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo) VALUES (1,'"+date+"',"+_selectedDispositivoID+")"
+    var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (1,'"+date+"',"+_selectedDispositivoID+", "+_selectedComodoID+")"
     socket.emit("general-sql",sql_create_on);
     location.reload();
   });
@@ -108,7 +108,7 @@ $(document).ready(function(){
     //adiciona o valor em status_dispositivo_historico
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
-    var sql_create_off = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo) VALUES (0,'"+date+"',"+_selectedDispositivoID+")"
+    var sql_create_off = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (0,'"+date+"',"+_selectedDispositivoID+","+_selectedComodoID+")"
     socket.emit("general-sql",sql_create_off);
     location.reload();
   });
