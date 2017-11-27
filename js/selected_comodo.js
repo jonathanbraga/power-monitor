@@ -57,21 +57,21 @@ $(document).ready(function(){
     $('#tabela-dispositivos tr:last').after('<tr><td>'+dispositivo+'</td><td>'+quantidade+'</td><td><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this)">Excluir</button></td>');
     if(moreone > 1){
       _sqlAdd = _sqlAdd + ",("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+")";
+      _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+","+_selectedComodoID+")";
     }
     else{
       _sqlAdd = "("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = "(0,"+dispositivo_id+")";
+      _sqlAddStatus = "(0,"+dispositivo_id+","+_selectedComodoID+")";
     }
     $("#inputQuantidade").val("");
   });
 
-  //Adiciona dispostivo ao comodo
+  //Adiciona dispostivo ao comodo selecionado
   $("#addDispositivoComodo").click(function(){
     var sqlAdd = "INSERT INTO comodo_dispositivo (quantidade_dispositivo,id_comodo,id_dispositivo) values "+_sqlAdd+" ;";
     socket.emit("general-sql", sqlAdd);
 
-    var sqlAddStatus = "INSERT INTO status_dispositivo (estado,id_dispositivo) values "+_sqlAddStatus+" ;";
+    var sqlAddStatus = "INSERT INTO status_dispositivo (estado,id_dispositivo,id_comodo) values "+_sqlAddStatus+" ;";
     socket.emit("general-sql", sqlAddStatus);
 
     location.reload();
@@ -86,7 +86,7 @@ $(document).ready(function(){
       return false;
     }
     //Atualiza o valor em status_dispositivo
-    var sql_update_on = "UPDATE status_dispositivo SET estado = 1 WHERE id_dispositivo = "+_selectedDispositivoID+";"
+    var sql_update_on = "UPDATE status_dispositivo SET estado = 1 WHERE id_dispositivo = "+_selectedDispositivoID+" and id_comodo = "+_selectedComodoID+";"
     socket.emit("general-sql", sql_update_on);
     //adiciona o valor em status_dispositivo_historico
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
@@ -103,7 +103,7 @@ $(document).ready(function(){
       return false;
     }
     //Atualiza o valor em status dispositivo
-    var sql_update_off = "UPDATE status_dispositivo SET estado = 0 WHERE id_dispositivo = "+_selectedDispositivoID+";"
+    var sql_update_off = "UPDATE status_dispositivo SET estado = 0 WHERE id_dispositivo = "+_selectedDispositivoID+" and id_comodo = "+_selectedComodoID+";"
     socket.emit("general-sql", sql_update_off);
     //adiciona o valor em status_dispositivo_historico
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
