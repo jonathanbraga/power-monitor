@@ -25,6 +25,15 @@ $(document).ready(function(){
       tr.fadeOut(400, function() {
          tr.remove();  		    
       });
+    var sql_historico = "DELETE FROM status_dispositivo_historico WHERE id_dispositivo = "+dispositivoItem+";";
+    socket.emit("general-sql",sql_historico);
+    //status_dispositivo
+    var sql_status = "DELETE FROM status_dispositivo WHERE id_dispositivo = "+dispositivoItem+";";
+    socket.emit("general-sql",sql_status);
+    //comodo dispositivo 
+    var sql_cd = "DELETE FROM comodo_dispositivo WHERE id_dispositivo = "+dispositivoItem+";";
+    socket.emit("general-sql",sql_cd);
+    //dispositivo
     var sql = "DELETE FROM dispositivo where id = "+dispositivoItem+"";
     socket.emit("general-sql",sql);  
     return false;		  
