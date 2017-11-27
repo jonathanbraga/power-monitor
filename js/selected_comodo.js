@@ -5,8 +5,10 @@ $(document).ready(function(){
   var _sqlAddStatus;
   var moreone = 0;
   var _selectedComodoID;
+  var _selectedDispositivoID;
+  var _selectedDispositivoEstado;
 
-  //Recebe o Dispostivo selecionado
+  //Recebe o Comodo selecionado
   socket.on("get-selected-comodo", function(c){
     _selectedComodoID = c[0].id;
    jQuery("label[for='titleComodo']").html(c[0].nome);
@@ -15,10 +17,20 @@ $(document).ready(function(){
   //Recebe todos os dispositivos do comodo selecionado
   socket.on("get-dispositivos-selected-comodo",function(d){
     var icone;
+    var status = "";
+    var status_color = "";
     for(i=0; i<d.length;i++)
     {
+      if(d[i].estado == 0){
+        status = "off";
+        status_color = "red";
+      }
+      else{
+        var status = "on";
+        var status_color = "green";
+      }
       icone = "fa fa-cutlery";
-      $("#box-dispositivos").append('<button class="btn btn-app" type="button" onclick="selectedDispositivo(this,'+d[i].id+')">'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
+      $("#box-dispositivos").append('<button class="btn btn-app" type="button" onclick="selectedDispositivo(this,'+d[i].id+','+d[i].estado+','+d[i].quantidade_dispositivo+')"><span class="badge bg-'+status_color+'">'+status+'</span>'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
     }
     console.log(d);
   });
@@ -65,6 +77,42 @@ $(document).ready(function(){
     location.reload();
   });
 
+  //Ligar ou Desligar Dispostivo
+
+  $("#onDispositivo").click(function(){
+    if(_selectedDispositivoEstado == 1)
+    {
+      alert("O dispositivo já se encontra ligado");
+      return false;
+    }
+    //Atualiza o valor em status_dispositivo
+    var sql_update_on = "UPDATE status_dispositivo SET estado = 1 WHERE id_dispositivo = "+_selectedDispositivoID+";"
+    socket.emit("general-sql", sql_update_on);
+    //adiciona o valor em status_dispositivo_historico
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
+    var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo) VALUES (1,'"+date+"',"+_selectedDispositivoID+")"
+    socket.emit("general-sql",sql_create_on);
+    location.reload();
+  });
+
+  $("#offDispositivo").click(function(){
+    if(_selectedDispositivoEstado == 0)
+    {
+      alert("O dispositivo já se encontra desligado");
+      return false;
+    }
+    //Atualiza o valor em status dispositivo
+    var sql_update_off = "UPDATE status_dispositivo SET estado = 0 WHERE id_dispositivo = "+_selectedDispositivoID+";"
+    socket.emit("general-sql", sql_update_off);
+    //adiciona o valor em status_dispositivo_historico
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
+    var sql_create_off = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo) VALUES (0,'"+date+"',"+_selectedDispositivoID+")"
+    socket.emit("general-sql",sql_create_off);
+    location.reload();
+  });
+
   // General Function
   (function($) {
     remove = function(item,comodoItem) {
@@ -76,8 +124,10 @@ $(document).ready(function(){
     return false;		  
     }
 
-    selectedDispositivo= function(item,dispositivo){
-      alert(dispositivo);
+    selectedDispositivo= function(item,id,estado,quantidade){
+      _selectedDispositivoID = id;
+      _selectedDispositivoEstado = estado;
+      $("#modal-dispositivo").modal('show');
       return false;
     }
   })(jQuery);

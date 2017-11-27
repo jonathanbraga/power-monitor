@@ -39,8 +39,8 @@ io.on("connection", function (client) {
         io.emit("get-selected-comodo",result);
     });
 
-    //Get dispositivos do comodo selecionado
-    con.query("SELECT d.id, d.nome FROM selected_comodo sc, comodo_dispositivo cd, dispositivo d WHERE d.id = cd.id_dispositivo and cd.id_comodo = sc.comodo_id", function (err, result, fields){
+    //Get dispositivos do comodo selecionado    
+    con.query("SELECT DISTINCT d.id,d.nome,sd.estado, cd.quantidade_dispositivo  FROM dispositivo d, status_dispositivo sd, comodo_dispositivo cd, selected_comodo sc WHERE sc.comodo_id = cd.id_comodo and d.id = cd.id_dispositivo and d.id = sd.id_dispositivo;", function (err, result, fields){
         if(err) throw err;
         io.emit("get-dispositivos-selected-comodo",result);
     });

@@ -37,3 +37,12 @@ CREATE TABLE selected_comodo(
    PRIMARY KEY (id),
    foreign key (comodo_id) references comodo(id)
 );
+
+CREATE TABLE status_dispositivo_historico(
+   id int auto_increment,
+   estado BOOLEAN,
+   data DATETIME,
+   id_dispositivo int,
+   PRIMARY KEY (id),
+   foreign key (id_dispositivo) references dispositivo(id) 	 
+);
