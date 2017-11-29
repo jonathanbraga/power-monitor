@@ -1,0 +1,27 @@
+{
+  "name": "power-monitor",
+  "version": "1.0.0",
+  "description": "A low-cost solution to monitor power",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mysql": "^2.15.0",
+    "socket.io-client": "^2.0.4",
+    "socketio": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonathanbraga/power-monitor.git"
+  },
+  "author": "Jonathan Braga",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jonathanbraga/power-monitor/issues"
+  },
+  "homepage": "https://github.com/jonathanbraga/power-monitor#readme"
+}
