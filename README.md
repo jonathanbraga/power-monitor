@@ -1,2 +1,5 @@
-# power-monitor
-Low-cost solution to monitor power
+# Power-monitor
+A low-cost solution to monitor power
+
+## Database scheme
+![](images/db.png)
