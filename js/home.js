@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  var socket = io.connect("http://localhost:3000");
+  var socket = io.connect("http://localhost:8000");
   var ready = false;
   var _sqlAdd;
   var moreone = 0;
@@ -50,9 +50,21 @@ $(document).ready(function(){
   // General Function
   (function($) {
     comodo = function(item,comodoItemID) {
-      var sql = "UPDATE selected_comodo set comodo_id = "+comodoItemID+"";
+      var sql;
+      var comodo;
+      socket.on("get-selected-comodo", function(c){
+        comodo = c[0];
+      });
+      console.log(comodo);
+        if(comodo == undefined){
+          var sql = "INSERT INTO selected_comodo (comodo_id) VALUES ("+comodoItemID+");";
+        }else{
+          var sql = "UPDATE selected_comodo set comodo_id = "+comodoItemID+"";
+        }
+        
       socket.emit("general-sql",sql);
-      window.location.replace("comodo_selected.html");  
+      window.location.replace("/comodo_selected"); 
+       
     return false;		  
     }
   })(jQuery);

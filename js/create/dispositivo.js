@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  var socket = io.connect("http://localhost:3000");
+  var socket = io.connect("http://localhost:8000");
   var ready = false;
 
 //Create dispositivo
@@ -8,6 +8,7 @@ $(document).ready(function(){
     var gasto = $("#inputGasto").val();
     var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
     var sql = "INSERT INTO dispositivo (nome,gasto,data_criacao) values ('"+nome+"',"+gasto+",'"+date+"');";
+    alert(sql);
     socket.emit("general-sql", sql);
   });
 
