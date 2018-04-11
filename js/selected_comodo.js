@@ -92,7 +92,7 @@ $(document).ready(function(){
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
     var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (1,'"+date+"',"+_selectedDispositivoID+", "+_selectedComodoID+")"
-    socket.emit("general-sql",sql_create_on);
+    socket.emit("status-dispositivo",sql_create_on,1);    
     location.reload();
   });
 
@@ -109,7 +109,7 @@ $(document).ready(function(){
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
     var sql_create_off = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (0,'"+date+"',"+_selectedDispositivoID+","+_selectedComodoID+")"
-    socket.emit("general-sql",sql_create_off);
+    socket.emit("status-dispositivo",sql_create_off,0);
     location.reload();
   });
 
