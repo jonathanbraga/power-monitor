@@ -62,13 +62,18 @@ app.use("/", router);
 io.on('connection', function (client) {
 
     // Get dispositivos    
-    con.query("SELECT * FROM dispositivo ORDER BY nome", function (err, result, fields) {
+    con.query("SELECT DISTINCT * FROM dispositivo ORDER BY nome", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-dispositivos", result)
     });
-
+    
+    //Get Dispositivos ligados
+    con.query("SELECT id,estado,id_dispositivo,id_comodo FROM status_dispositivo WHERE estado = 1", function (err, result, fields){
+        if(err) throw err;
+        io.emit("get-dispositivos-on",result);
+    });
     ///Get Comodos    
-    con.query("SELECT DISTINCT* FROM comodo ORDER BY nome", function (err, result, fields) {
+    con.query("SELECT c.id, c.nome, SUM(cd.estado)  FROM comodo c, status_dispositivo cd WHERE cd.estado = 1 GROUP BY c.id;", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-comodos", result)
     });
@@ -92,6 +97,7 @@ io.on('connection', function (client) {
             if (err) throw err;
         });
     });
+
 
     client.on("status-dispositivo", function (sql, stateLed) {
         con.query(sql, stateLed, function (err, result, fields) {
