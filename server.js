@@ -91,6 +91,11 @@ io.on('connection', function (client) {
         //console.log(result);
     });
 
+    con.query("SELECT sdh.id, sdh.estado, sdh.data, sdh.id_dispositivo, sdh.id_comodo FROM status_dispositivo_historico sdh, select_dispositivo sd WHERE sdh.id_dispositivo = sd.dispositivo_id and sdh.id_comodo = sd.comodo_id;",function(err,result,fields){
+        if(err) throw err;
+        io.emit("get-dispositivo-historico", result);
+    });
+
     //Qualquer SQL
     client.on("general-sql", function (sql) {
         con.query(sql, function (err, result, fields) {

@@ -49,3 +49,12 @@ CREATE TABLE status_dispositivo_historico(
    foreign key (id_dispositivo) references dispositivo(id),
    foreign key (id_comodo) references comodo(id)	 
 );
+
+CREATE TABLE select_dispositivo(
+    id int auto_increment,
+    dispositivo_id int,
+    comodo_id int,
+    PRIMARY KEY (id),
+    FOREIGN KEY (comodo_id) REFERENCES comodo(id),
+    FOREIGN KEY (dispositivo_id) REFERENCES dispositivo(id)
+);

@@ -7,7 +7,49 @@ $(document).ready(function(){
   var _selectedComodoID;
   var _selectedDispositivoID;
   var _selectedDispositivoEstado;
+  var statusDispositivoHistorico = new StatusDispositivoHistorico();
 
+
+  socket.on("get-dispositivo-historico",function(dispositivos){
+    for(i = 0; i< dispositivos.length; i++){
+      var d1 = null;
+      var d2 = null;
+      if(dispositivos[i] != undefined)
+      {
+        d1 = new Date(dispositivos[i].data);
+      }
+      if(dispositivos[++i] != undefined)
+      {
+        d2 = new Date(dispositivos[i].data);
+      }
+      if(d1 != null || d2 != null)
+      {
+        CalculaHorasEntreDatas(d1,d2);
+      }
+    }
+  });
+
+  CalculaHorasEntreDatas = function(d1,d2){
+    if(d1 != null && d2 != null)
+    {
+      var d1 = new Date(d1).getTime();
+      var d2 = d2 || new Date().getTime();
+      var df = Math.abs(d1 - d2);
+      var td = {
+          d: Math.round(df / (24 * 60 * 60 * 1000)), //dias
+          h: Math.round(df / (60 * 60 * 1000)), //horas
+          m: Math.abs(Math.round(df / (60 * 1000)) - (60 * 1000)), //minutos
+          s: Math.abs(Math.round(df / 1000) - 1000)
+      };
+      var result = '';
+      td.d > 0 ? result += td.d + ' dias ' : '';
+      td.h > 0 ? result += ('0' + td.h).slice(-2) + ':' : '00:';
+      td.m > 0 ? result += ('0' + td.m).slice(-2) + ':' : '00:';
+      td.s > 0 ? result += ('0' + td.s).slice(-2) : '00';
+
+      console.log(result);
+    }
+  }
   //Recebe o Comodo selecionado
   socket.on("get-selected-comodo", function(c){
     _selectedComodoID = c[0].id;
@@ -92,7 +134,7 @@ $(document).ready(function(){
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     var date = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
     var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (1,'"+date+"',"+_selectedDispositivoID+", "+_selectedComodoID+")"
-    socket.emit("status-dispositivo",sql_create_on,1);    
+    socket.emit("status-dispositivo",sql_create_on,1);  
     location.reload();
   });
 
@@ -141,6 +183,10 @@ $(document).ready(function(){
     }
 
     selectedDispositivo= function(item,id,estado,quantidade){
+      //Atualiza o valor da tablea SELECT dispositivo
+      var sql_update_dispositivo_selecionado = "UPDATE select_dispositivo SET dispositivo_id = "+id+", comodo_id = "+_selectedComodoID+";";
+      socket.emit("general-sql", sql_update_dispositivo_selecionado);
+
       _selectedDispositivoID = id;
       _selectedDispositivoEstado = estado;
       $("#modal-dispositivo").modal('show');
