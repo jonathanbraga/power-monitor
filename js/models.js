@@ -5,6 +5,14 @@ function Comodo(id,nome){
     this.nome = nome || '';
 }
 
+//Dispositivo
+function Dispositivo(id,nome,gasto,dataCriacao){
+    this.id = id || 0;
+    this.nome = nome || "";
+    this.gasto = gasto || 0;
+    this.dataCriacao = dataCriacao || new Date();
+}
+
 // COMODO DISPOSITIVO
 function ComodoDispositivo(quantidadeDispositivo, idComodo, idDispositivo){
     this.quantidadeDispositivo = quantidadeDispositivo || 0;

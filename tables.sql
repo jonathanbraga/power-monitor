@@ -33,7 +33,6 @@ CREATE TABLE status_dispositivo(
 
 CREATE TABLE selected_comodo(
    id int auto_increment,
-   first_time BOOLEAN,
    comodo_id int,
    PRIMARY KEY (id),
    foreign key (comodo_id) references comodo(id)

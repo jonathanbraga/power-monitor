@@ -8,48 +8,55 @@ $(document).ready(function(){
   var _selectedDispositivoID;
   var _selectedDispositivoEstado;
   var statusDispositivoHistorico = new StatusDispositivoHistorico();
+  var _dispositivo = new Dispositivo();
+  var _statusDispositivoHistorico = new StatusDispositivoHistorico();
+  var _listaStatusHistoricoDispositivos = new Array();
+  var _listaComodoDispositivo = new Array();
+  var _chartData = new Array();
+
+  // socket.on("get-dispositivo",function(dispositivo){
+  //   _dispositivo.id = dispositivo[0].id;
+  //   _dispositivo.nome = dispositivo[0].nome;
+  //   _dispositivo.gasto = dispositivo[0].gasto;
+  //   _dispositivo.dataCriacual = mesAtual.getMonth();
+  //     if(dispositivos[i] != undefined)
+  //     {
+  //       d1 = new Date(dispositivos[i].data);
+  //     }
+  //     if(dispositivos[++i] != undefined)
+  //     {
+  //       d2 = new Date(dispositivos[i].data);
+  //     }
+  //     if(d1 != null || d2 != null)
+  //     {
+  //       if(d2 != null && d2.getMonth() == mesAtual)
+  //       {          
+  //         var resultadoHoras = CalculaHorasEntreDatas(d1,d2);
+  //       }
+  //     }
+  //   }
+  // });
+
+  // CalculaHorasEntreDatas = function(d1,d2){
+  //   if(d1 != null && d2 != null)
+  //   {
+  //     var result = Math.abs(d2- d1) / 36e5;
+  //     var consumoTotal = (_dispositivo.gasto * result)/720;
+  //     consumoTotal = consumoTotal * 0.35;
+  //     consoao = new Date(dispositivo[0].data_criacao);
+  // });
 
 
-  socket.on("get-dispositivo-historico",function(dispositivos){
-    for(i = 0; i< dispositivos.length; i++){
-      var d1 = null;
-      var d2 = null;
-      if(dispositivos[i] != undefined)
-      {
-        d1 = new Date(dispositivos[i].data);
-      }
-      if(dispositivos[++i] != undefined)
-      {
-        d2 = new Date(dispositivos[i].data);
-      }
-      if(d1 != null || d2 != null)
-      {
-        CalculaHorasEntreDatas(d1,d2);
-      }
-    }
-  });
+  // socket.on("get-dispositivo-historico",function(dispositivos){
+  //   for(i = 0; i< dispositivos.length; i++){
+  //     var d1 = null;
+  //     var d2 = null;
+  //     var mesAtual = new Date();
+  //     mesAtle.log(consumoTotal)
+  //   }
+  // }
 
-  CalculaHorasEntreDatas = function(d1,d2){
-    if(d1 != null && d2 != null)
-    {
-      var d1 = new Date(d1).getTime();
-      var d2 = d2 || new Date().getTime();
-      var df = Math.abs(d1 - d2);
-      var td = {
-          d: Math.round(df / (24 * 60 * 60 * 1000)), //dias
-          h: Math.round(df / (60 * 60 * 1000)), //horas
-          m: Math.abs(Math.round(df / (60 * 1000)) - (60 * 1000)), //minutos
-          s: Math.abs(Math.round(df / 1000) - 1000)
-      };
-      var result = '';
-      td.d > 0 ? result += td.d + ' dias ' : '';
-      td.h > 0 ? result += ('0' + td.h).slice(-2) + ':' : '00:';
-      td.m > 0 ? result += ('0' + td.m).slice(-2) + ':' : '00:';
-      td.s > 0 ? result += ('0' + td.s).slice(-2) : '00';
 
-      console.log(result);
-    }
-  }
   //Recebe o Comodo selecionado
   socket.on("get-selected-comodo", function(c){
     _selectedComodoID = c[0].id;
@@ -63,6 +70,15 @@ $(document).ready(function(){
     var status_color = "";
     for(i=0; i<d.length;i++)
     {
+      // Cria o objeto _dispositivo
+      _dispositivo.id = d[i].id;
+      _dispositivo.nome = d[i].nome;
+      _dispositivo.gasto = d[i].gasto;
+
+      //preenche a lista de dispositivos do comodo
+      _listaComodoDispositivo.push(_dispositivo);
+      _dispositivo = new Dispositivo();
+
       if(d[i].estado == 0){
         status = "off";
         status_color = "red";
@@ -74,7 +90,6 @@ $(document).ready(function(){
       icone = "fa fa-cutlery";
       $("#box-dispositivos").append('<button class="btn btn-app" type="button" onclick="selectedDispositivo(this,'+d[i].id+','+d[i].estado+','+d[i].quantidade_dispositivo+')"><span class="badge bg-'+status_color+'">'+status+'</span>'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
     }
-    console.log(d);
   });
 
   //Adiciona os dispositivos a ao select
@@ -86,7 +101,74 @@ $(document).ready(function(){
         text : d[i].nome 
       }));
     }
-    console.log(d);
+  });
+
+  //Dados para o gŕafico
+  socket.on("get-status-dispositivos-comodo",function(result){
+    $.each(result, function(index,value){
+      _statusDispositivoHistorico.id = value.id;
+      _statusDispositivoHistorico.estado = value.estado;
+      _statusDispositivoHistorico.data = new Date(value.data);
+      _statusDispositivoHistorico.idDispositivo = value.id_dispositivo;
+      _statusDispositivoHistorico.idComodo = value.id_comodo;
+      _listaStatusHistoricoDispositivos.push(_statusDispositivoHistorico);      
+      _statusDispositivoHistorico = new StatusDispositivoHistorico();
+    });
+
+    var auxIndex = 0;
+    var teste = 0;
+    var valor = 0;
+    $.each(_listaComodoDispositivo,function(indexDispositivo,dispositivo){      
+      auxIndex = 0;
+      valor = 0;
+      $.each(_listaStatusHistoricoDispositivos, function(){
+        //Elemento Atual
+        var item = $(this).data('item',auxIndex);
+        //Indice do prox elemento
+        var t = auxIndex + 1;
+        var prox = [];
+        //Verifica se o indice do prox elemento é menor ou igual que a lista atual
+        if(t <= _listaStatusHistoricoDispositivos.length){
+          prox = _listaStatusHistoricoDispositivos[t];
+        }
+        //Verifica se é o mesmo dispositivo
+        if(dispositivo.id == item[0].idDispositivo){
+          //Verifica se o dispositivo é válido
+          if(prox != undefined && teste != item[0].id && prox.id != item[0].id && prox.idDispositivo == item[0].idDispositivo){
+            teste = prox.id;
+            var calcDatas = CalculaHorasEntreDatas(item[0].data, prox.data);
+            var result = CalculaConsumoDispositivo(calcDatas,dispositivo.gasto);
+            valor = valor + result;
+          }
+        }
+        auxIndex ++;
+      });
+      _chartData.push({name:dispositivo.nome,data:[valor]});
+    });
+
+    // Gráfico do consumo de cada dispositivo
+    Highcharts.chart('container', {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: 'Consumo dos dispositivos no mês atual'
+      },
+      yAxis: {
+          min: 0.00,
+          title: {
+              text: 'Consumo em reais'
+          }
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      series: _chartData
+    });
+
   });
 
   //Lista dos dispositivos adicionados ao comodo

@@ -61,6 +61,7 @@ app.use("/", router);
 //Main connection
 io.on('connection', function (client) {
 
+    
     // Get dispositivos    
     con.query("SELECT DISTINCT * FROM dispositivo ORDER BY nome", function (err, result, fields) {
         if (err) throw err;
@@ -73,36 +74,46 @@ io.on('connection', function (client) {
         io.emit("get-dispositivos-on",result);
     });
     ///Get Comodos    
-    con.query("SELECT c.id, c.nome, SUM(cd.estado)  FROM comodo c, status_dispositivo cd WHERE cd.estado = 1 GROUP BY c.id;", function (err, result, fields) {
+    con.query("SELECT DISTINCT* FROM comodo ORDER BY nome;", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-comodos", result)
     });
-
+    
     //Get Comodo selecionado
     con.query("SELECT c.id,c.nome from comodo c, selected_comodo sc where c.id = sc.comodo_id", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-selected-comodo", result);
     });
-
+    
     //Get dispositivos do comodo selecionado    
-    con.query("SELECT DISTINCT d.id,d.nome,sd.estado, cd.quantidade_dispositivo  FROM dispositivo d, status_dispositivo sd, comodo_dispositivo cd, selected_comodo sc WHERE sc.comodo_id = cd.id_comodo and d.id = cd.id_dispositivo and d.id = sd.id_dispositivo and sd.id_comodo = sc.comodo_id;", function (err, result, fields) {
+    con.query("SELECT DISTINCT d.id,d.nome, d.gasto, sd.estado, cd.quantidade_dispositivo  FROM dispositivo d, status_dispositivo sd, comodo_dispositivo cd, selected_comodo sc WHERE sc.comodo_id = cd.id_comodo and d.id = cd.id_dispositivo and d.id = sd.id_dispositivo and sd.id_comodo = sc.comodo_id;", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-dispositivos-selected-comodo", result);
         //console.log(result);
     });
 
-    con.query("SELECT sdh.id, sdh.estado, sdh.data, sdh.id_dispositivo, sdh.id_comodo FROM status_dispositivo_historico sdh, select_dispositivo sd WHERE sdh.id_dispositivo = sd.dispositivo_id and sdh.id_comodo = sd.comodo_id;",function(err,result,fields){
+    // Get Status dos dispositvos por comodo selecionado
+    con.query("SELECT sdh.id,sdh.estado,sdh.data,sdh.id_dispositivo,sdh.id_comodo FROM status_dispositivo_historico sdh, selected_comodo sc WHERE sdh.id_comodo = sc.comodo_id;", function(err,result,fields){
         if(err) throw err;
-        io.emit("get-dispositivo-historico", result);
+        io.emit("get-status-dispositivos-comodo",result);
     });
-
+    
     //Qualquer SQL
     client.on("general-sql", function (sql) {
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
         });
     });
+    
+    con.query("SELECT d.id, d.nome, d.gasto, d.data_criacao FROM dispositivo d, select_dispositivo sd WHERE d.id = sd.dispositivo_id;",function(err,result,fields){
+        if(err) throw err;
+        io.emit("get-dispositivo", result);
+    });
 
+    con.query("SELECT sdh.id, sdh.estado, sdh.data, sdh.id_dispositivo, sdh.id_comodo FROM status_dispositivo_historico sdh, select_dispositivo sd WHERE sdh.id_dispositivo = sd.dispositivo_id and sdh.id_comodo = sd.comodo_id;",function(err,result,fields){
+        if(err) throw err;
+        io.emit("get-dispositivo-historico", result);
+    });
 
     client.on("status-dispositivo", function (sql, stateLed) {
         con.query(sql, stateLed, function (err, result, fields) {

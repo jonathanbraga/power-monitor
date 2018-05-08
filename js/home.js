@@ -20,9 +20,9 @@ $(document).ready(function(){
   
   //Recebe todos os dispositivos
   socket.on("get-comodos",function(d){
-    var icone;
     var st_on = 0;
     $.each(d,function(indexComodo,comodo){
+      var icone;
       if(comodo.nome.toLowerCase() == "cozinha" ){
         icone = "fa fa-cutlery";
       }
@@ -55,15 +55,7 @@ $(document).ready(function(){
   });
 
   // -------------------------------------------------- COMODO SELECIONADO ----------------------------------------------------  
-
-  // Busca todos os dispositivos do comodo
-  socket.on("get-dispositivo",function(d){
-    for(i=0; i<d.length;i++)
-    {
-      $("#box-comodos").append('<button class="btn btn-app" type="button" onclick="comodo(this,'+d[i].id+')"><i class="'+icone+'"></i>'+d[i].nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
-    }
-    console.log(d);
-  });
+ 
 
   // General Function
   (function($) {
@@ -74,7 +66,8 @@ $(document).ready(function(){
         comodo = c[0];
       });
       console.log(comodo);
-          var sql = "UPDATE selected_comodo set comodo_id = "+comodoItemID+"";        
+      var sql = "UPDATE selected_comodo set comodo_id = "+comodoItemID+"";        
+      console.log("SQL", sql)
       socket.emit("general-sql",sql);
       window.location.replace("/comodo_selected"); 
        

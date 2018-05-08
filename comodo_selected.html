@@ -225,7 +225,7 @@
         </div>        
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteDispositivo">Deletar dipositivo</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" >Confirmar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" >Fechar</button>
         </div>
       </div>
     </div>
@@ -319,7 +319,12 @@
                 </div>
               </div>
             </div>       
-        </div>        
+        </div>   
+        <div class="row">
+          <div class="col-md-12">
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          </div>
+        </div>     
     </section>
     <!-- /.content -->
   </div>
@@ -346,7 +351,11 @@
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="js/models.js"></script>
+<script src="js/HelperCalculos.js"></script>
 <script src="js/selected_comodo.js"></script>
 </body>
 </html>
