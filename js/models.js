@@ -37,3 +37,11 @@ function StatusDispositivoHistorico(id,estado,data,idDispositivo,idComodo){
     this.idComodo = idComodo || 0;
 }
 
+//NOTIFICAÇÕES
+function Notification(id,message,isRead,created){
+    this.id = id || 0;
+    this.message = message || "";
+    this.isRead =  isRead || false;
+    this.created = created || new Date();
+}
+

@@ -6,6 +6,33 @@ $(document).ready(function(){
   var _selectedComodoID;
   var dispositivos_ligados_lista = new Array();
   var statusDispositivo = new StatusDispositivo();
+  var _notifications = new Notification();
+  var _idNotificacao = new Array();
+
+    //Receb todas as notificações
+    socket.on("get-notifications",function(item){
+      console.log(item);
+      //Número em desta das mensagens
+      $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
+      //informação complementar ao abrir o quadro de notificações
+      $("#info-count-message").append('Você tem '+item.length+' mensagens não lidas')
+      // listagem das notificações
+      $.each(item,function(index,item){
+        $("#lista-notificacao").append('<ul class="menu"> <li> <a href="#"> <i class="fa fa-users text-aqua"></i> '+item.message+' </a></li></ul>')
+        _idNotificacao.push(item.id);
+      });
+    });
+  
+    // Lista de notificação
+    $("#notifications").click(function(){
+      console.log(_idNotificacao.length)
+      if(_idNotificacao.length != 0){
+        var sql_update_notification = "UPDATE notification set isRead = true IN ("+_idNotificacao+");";
+        socket.emit("general-sql",sql_update_notification);      
+      }
+      $("#count").empty();
+      $("#count").append("0");
+    });
 
   socket.on("get-dispositivos-on",function(r){
     $.each(r,function(index,value){

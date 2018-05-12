@@ -57,3 +57,11 @@ CREATE TABLE select_dispositivo(
     FOREIGN KEY (comodo_id) REFERENCES comodo(id),
     FOREIGN KEY (dispositivo_id) REFERENCES dispositivo(id)
 );
+
+CREATE TABLE notification(
+    id int auto_increment,
+    message VARCHAR(255),
+    isRead BOOLEAN,
+    created DATETIME,
+    PRIMARY KEY (id)
+);

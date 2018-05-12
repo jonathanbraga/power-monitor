@@ -61,6 +61,11 @@ app.use("/", router);
 //Main connection
 io.on('connection', function (client) {
 
+    // Get todas as notificações
+    con.query("SELECT * FROM notification WHERE isRead = false ORDER BY created DESC;",function(err,result,fields){
+        if(err) throw err;
+        io.emit("get-notifications",result);
+    });
     
     // Get dispositivos    
     con.query("SELECT DISTINCT * FROM dispositivo ORDER BY nome", function (err, result, fields) {
