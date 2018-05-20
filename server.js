@@ -4,6 +4,9 @@ var io = require('socket.io')(server);
 var static = require('express-static');
 var router = require('express').Router();
 var mysql = require('mysql');
+var moment = require('moment');
+
+var currentMonth = moment(new Date(),'YYYY/MM/DD').format('M');
 
 //Load nos arquivos static
 server.listen(process.env.PORT || 8000);
@@ -78,12 +81,19 @@ io.on('connection', function (client) {
         if(err) throw err;
         io.emit("get-dispositivos-on",result);
     });
+    
     ///Get Comodos    
     con.query("SELECT DISTINCT* FROM comodo ORDER BY nome;", function (err, result, fields) {
         if (err) throw err;
         io.emit("get-comodos", result)
     });
     
+    // Get Historico de dispositivos pelo mês atual
+    con.query("SELECT sdh.id as id, sdh.data as data, sdh.estado as estado, sdh.id_comodo as id_comodo, sdh.id_dispositivo as id_dispositivo, d.gasto as gasto FROM status_dispositivo_historico sdh, dispositivo d  WHERE MONTH(sdh.data) = "+currentMonth+" and d.id = sdh.id_dispositivo ORDER BY sdh.id_dispositivo,sdh.id_comodo,sdh.data;", function(err,result,fields){
+        if(err) throw err;
+        io.emit("getStatusDispositivoComodoByMonth",result);
+    });
+
     //Get Comodo selecionado
     con.query("SELECT c.id,c.nome from comodo c, selected_comodo sc where c.id = sc.comodo_id", function (err, result, fields) {
         if (err) throw err;
@@ -98,7 +108,7 @@ io.on('connection', function (client) {
     });
 
     // Get Status dos dispositvos por comodo selecionado
-    con.query("SELECT sdh.id,sdh.estado,sdh.data,sdh.id_dispositivo,sdh.id_comodo FROM status_dispositivo_historico sdh, selected_comodo sc WHERE sdh.id_comodo = sc.comodo_id;", function(err,result,fields){
+    con.query("SELECT sdh.id,sdh.estado,sdh.data,sdh.id_dispositivo,sdh.id_comodo FROM status_dispositivo_historico sdh, selected_comodo sc WHERE sdh.id_comodo = sc.comodo_id AND MONTH(sdh.data) = "+currentMonth+" ORDER BY sdh.id_dispositivo,sdh.data;", function(err,result,fields){
         if(err) throw err;
         io.emit("get-status-dispositivos-comodo",result);
     });

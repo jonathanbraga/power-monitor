@@ -29,12 +29,13 @@ function StatusDispositivo(id, estado, idDispositivo,idComodo){
 }
 
 //STATUS DISPOSITIVO HISTORICO
-function StatusDispositivoHistorico(id,estado,data,idDispositivo,idComodo){
+function StatusDispositivoHistorico(id,estado,data,idDispositivo,idComodo,gasto){
     this.id = id || 0;
     this.estado = estado ||  0;
     this.data = data || new Date();
     this.idDispositivo = idDispositivo || 0;
     this.idComodo = idComodo || 0;
+    this.gasto = gasto || 0;
 }
 
 //NOTIFICAÇÕES

@@ -8,6 +8,10 @@ $(document).ready(function(){
   var statusDispositivo = new StatusDispositivo();
   var _notifications = new Notification();
   var _idNotificacao = new Array();
+  var _statusDispositivoHistorico = new StatusDispositivoHistorico();
+  var _listaStatusDispositivoHistorico = [];
+  var _comodos = [];
+  var _chartData = new Array();
 
     //Receb todas as notificações
     socket.on("get-notifications",function(item){
@@ -49,6 +53,7 @@ $(document).ready(function(){
   socket.on("get-comodos",function(d){
     var st_on = 0;
     $.each(d,function(indexComodo,comodo){
+      _comodos.push({id:comodo.id,nome:comodo.nome})
       var icone;
       if(comodo.nome.toLowerCase() == "cozinha" ){
         icone = "fa fa-cutlery";
@@ -80,6 +85,62 @@ $(document).ready(function(){
       st_on = 0;
     })
   });
+
+  socket.on("getStatusDispositivoComodoByMonth",function(result){
+    $.each(result,function(index,item){
+      _statusDispositivoHistorico.id = item.id;
+      _statusDispositivoHistorico.idComodo = item.id_comodo;
+      _statusDispositivoHistorico.idDispositivo = item.id_dispositivo
+      _statusDispositivoHistorico.data = item.data;
+      _statusDispositivoHistorico.estado = item.estado;
+      _statusDispositivoHistorico.gasto = item.gasto
+
+      _listaStatusDispositivoHistorico.push(_statusDispositivoHistorico);
+      _statusDispositivoHistorico = new StatusDispositivoHistorico();
+    });
+    
+    var auxIndex = 0;
+    var teste = 0;
+    var valor = 0;
+    $.each(_comodos,function(indexComodo,comodo){
+      auxIndex = 0;
+      valor = 0;
+      console.log(comodo.nome)
+      $.each(_listaStatusDispositivoHistorico,function(){
+        //Elemento Atual
+        var item = $(this).data('item',auxIndex);
+        //Proximo indece e item
+        var t = auxIndex +1;
+        var prox = [];
+
+        //Verifica se o indice do prox elemento é menor ou igual que a lista atual
+        if(t <= _listaStatusDispositivoHistorico.length){
+          prox = _listaStatusDispositivoHistorico[t];
+        }
+        
+        if(comodo.id == item[0].idComodo && prox != undefined ){
+          if(item[0].idDispositivo != prox.idDispositivo){
+            console.log(item[0].id, prox.id)
+          }
+          //Verifica se o dispositivo é válido
+          if(teste != item[0].id && prox.id != item[0].id && 
+            prox.idDispositivo == item[0].idDispositivo && item[0].estado != prox.estado){
+            teste = prox.id;
+            console.log("item atual: ", item[0].id,item[0].estado, item[0].gasto)
+            console.log("Proximo item: ", prox.id,prox.estado, prox.gasto)
+            var d1 = new Date(item[0].data)
+            var d2 = new Date(prox.data)
+            var calcDatas = CalculaHorasEntreDatas(d1, d2);
+            var result = CalculaConsumoDispositivo(calcDatas,item[0].gasto);
+            valor = valor + result;
+          }
+        }
+        auxIndex ++;
+      });
+      _chartData.push({name:comodo.nome,data:[valor]});
+    });
+    Horizontal_Chart(_chartData,'Gráfico mensal por cômodo');
+  }); 
 
   // -------------------------------------------------- COMODO SELECIONADO ----------------------------------------------------  
  

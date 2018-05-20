@@ -121,7 +121,7 @@ $(document).ready(function(){
         //Verifica se é o mesmo dispositivo
         if(dispositivo.id == item[0].idDispositivo){
           //Verifica se o dispositivo é válido
-          if(prox != undefined && teste != item[0].id && prox.id != item[0].id && prox.idDispositivo == item[0].idDispositivo){
+          if(prox != undefined && teste != item[0].id && prox.id != item[0].id && prox.idDispositivo == item[0].idDispositivo && item[0].estado != prox.estado){
             teste = prox.id;
             var calcDatas = CalculaHorasEntreDatas(item[0].data, prox.data);
             var result = CalculaConsumoDispositivo(calcDatas,dispositivo.gasto);
@@ -134,27 +134,7 @@ $(document).ready(function(){
     });
 
     // Gráfico do consumo de cada dispositivo
-    Highcharts.chart('container', {
-      chart: {
-          type: 'column'
-      },
-      title: {
-          text: 'Consumo dos dispositivos no mês atual'
-      },
-      yAxis: {
-          min: 0.00,
-          title: {
-              text: 'Consumo em reais'
-          }
-      },
-      plotOptions: {
-          column: {
-              pointPadding: 0.2,
-              borderWidth: 0
-          }
-      },
-      series: _chartData
-    });
+    Vertical_Chart(_chartData,'Consumo dos dispositivos no mês atual');
 
   });
 
@@ -211,7 +191,7 @@ $(document).ready(function(){
 
     //adiciona o valor em status_dispositivo_historico
     var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (1,'"+date+"',"+_selectedDispositivoID+", "+_selectedComodoID+")"
-    socket.emit("status-dispositivo",sql_create_on,1);  
+    socket.emit("general-sql",sql_create_on,1);  
     location.reload();
   });
 
