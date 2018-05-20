@@ -16,4 +16,4 @@ build
 npm-debug.log
 
 #vs_code
-.vscode
+.vscode/

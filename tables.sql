@@ -33,7 +33,6 @@ CREATE TABLE status_dispositivo(
 
 CREATE TABLE selected_comodo(
    id int auto_increment,
-   first_time BOOLEAN,
    comodo_id int,
    PRIMARY KEY (id),
    foreign key (comodo_id) references comodo(id)
@@ -48,4 +47,21 @@ CREATE TABLE status_dispositivo_historico(
    PRIMARY KEY (id),
    foreign key (id_dispositivo) references dispositivo(id),
    foreign key (id_comodo) references comodo(id)	 
+);
+
+CREATE TABLE select_dispositivo(
+    id int auto_increment,
+    dispositivo_id int,
+    comodo_id int,
+    PRIMARY KEY (id),
+    FOREIGN KEY (comodo_id) REFERENCES comodo(id),
+    FOREIGN KEY (dispositivo_id) REFERENCES dispositivo(id)
+);
+
+CREATE TABLE notification(
+    id int auto_increment,
+    message VARCHAR(255),
+    isRead BOOLEAN,
+    created DATETIME,
+    PRIMARY KEY (id)
 );
