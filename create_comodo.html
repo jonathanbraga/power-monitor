@@ -170,14 +170,14 @@
           <!-- Sidebar Menu -->
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">Configurações</li>
-            <li class="treeview">
+            <li class="treeview active">
               <a href="#"><i class="fa fa-bed"></i> <span>Cômodo</span>
                 <span class="pull-right-container">
                     <i class="fa fa-angle-left pull-right"></i>
                   </span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/create_comodo">Adicionar</a></li>
+                <li class="active"><a href="/create_comodo">Adicionar</a></li>
                 <li><a href="/list_comodo">Listar</a></li>
               </ul>
             </li>
@@ -194,7 +194,7 @@
             </li>
             <li class="header">Principal</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="/"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
+            <li><a href="/"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
             <li><a href="relatorio.html"><i class="fa fa-area-chart"></i> <span>Relatórios</span></a></li>            
           </ul>
           <!-- /.sidebar-menu -->
@@ -226,40 +226,11 @@
                 <input type="text" class="form-control" id="inputNome" placeholder="Nome">
               </div>
             </div>
-            <div class="form-group">
-              <label for="inputQuantidade" class="col-sm-2 control-label">Quantidade</label>
-              <div class="col-sm-2">
-                  <input type="text" id="inputQuantidade" class="form-control" placeholder="Quantidade"></select>
-              </div>
-              <label for="select-dispositivo" class="col-sm-1 control-label">Dispositivo</label>
-              <div class="col-sm-5">
-                  <select id="select-dispositivo" class="form-control select2" style="width: 100%;"></select>
-              </div>
-              <div class="col-sm-2">
-                <button type="button" class="btn btn-info pull" id="adicionar-dispositivo">Adicionar</button>
-              </div>
-            </div>
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info pull-right">Confirmar</button>            
           </div>
         </form>
-      </div>
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Dispositivos Adicionados</h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body no-padding">
-          <table class="table table-striped" id="tabela-dispositivos">
-            <tr>
-              <th>Dispositivo</th>
-              <th>Quantidade</th>
-              <th style="width: 40px">#</th>
-            </tr>
-          </table>
-        </div>
-        <!-- /.box-body -->
       </div>
       <!-- /.box -->
     </div>

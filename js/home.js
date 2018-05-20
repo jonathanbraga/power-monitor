@@ -81,7 +81,7 @@ $(document).ready(function(){
           st_on = st_on + 1;
         }
       })
-      $("#box-comodos").append('<button class="btn btn-app" type="button" onclick="comodo(this,'+comodo.id+')"><span class="badge bg-green">'+st_on+'</span><i class="'+icone+'"></i>'+comodo.nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
+      $("#box-comodos").append('<button class="btn btn-app" type="button" onclick="comodo(this,'+comodo.id+')"><span class="badge bg-blue">'+st_on+'</span><i class="'+icone+'"></i>'+comodo.nome+' <label hidden="hidden" class="idComodo">sss</label></button>');
       st_on = 0;
     })
   });
