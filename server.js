@@ -57,6 +57,10 @@ router.get("/list_dispositivo", function (req, res) {
 router.get("/comodo_selected", function (req, res) {
     res.sendFile(__dirname + "/comodo_selected.html");
 });
+//rota configurações
+router.get("/settings", function (req, res) {
+    res.sendFile(__dirname + "/settings.html");
+});
 
 
 app.use("/", router);
