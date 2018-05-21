@@ -138,23 +138,27 @@ $(document).ready(function(){
 
   });
 
-  //Lista dos dispositivos adicionados ao comodo
+  //adiciona a lista dos dispositivos do comodo
   $("#adicionar-dispositivo").click(function(){
-    moreone = moreone + 1;
-    var data = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    var quantidade =  $("#inputQuantidade").val();
-    var dispositivo =  $( "#select-dispositivo option:selected" ).text();
-    var dispositivo_id = $( "#select-dispositivo option:selected" ).val();
-    $('#tabela-dispositivos tr:last').after('<tr><td>'+dispositivo+'</td><td>'+quantidade+'</td><td><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this)">Excluir</button></td>');
-    if(moreone > 1){
-      _sqlAdd = _sqlAdd + ",("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+","+_selectedComodoID+")";
+    if($("#inputQuantidade")[0].value != ""){
+      moreone = moreone + 1;
+      var data = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      var quantidade =  $("#inputQuantidade").val();
+      var dispositivo =  $( "#select-dispositivo option:selected" ).text();
+      var dispositivo_id = $( "#select-dispositivo option:selected" ).val();
+      $('#tabela-dispositivos tr:last').after('<tr><td>'+dispositivo+'</td><td>'+quantidade+'</td><td><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this)">Excluir</button></td>');
+      if(moreone > 1){
+        _sqlAdd = _sqlAdd + ",("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
+        _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+","+_selectedComodoID+")";
+      }
+      else{
+        _sqlAdd = "("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
+        _sqlAddStatus = "(0,"+dispositivo_id+","+_selectedComodoID+")";
+      }
+      $("#inputQuantidade").val("");
+    }else{
+      alert("Insira a quantidade")
     }
-    else{
-      _sqlAdd = "("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = "(0,"+dispositivo_id+","+_selectedComodoID+")";
-    }
-    $("#inputQuantidade").val("");
   });
 
   //Adiciona dispostivo ao comodo selecionado
