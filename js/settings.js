@@ -38,6 +38,7 @@ $(document).ready(function(){
         }
     });
 
+    // Habilita a opção de editar os parâmetros
     $("#editaParametro").click(function(){
         $("#inputTarifa").attr('readonly', false);
         $("#inputGastoMensal").attr('readonly', false);

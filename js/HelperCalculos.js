@@ -24,3 +24,8 @@ function HoraDataFormatada(){
 
   return date;
 }
+
+function ProgressoConsumo(limite,gasto){
+  var result = (gasto*100)/limite;
+  return result;
+}

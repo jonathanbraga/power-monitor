@@ -105,7 +105,6 @@ $(document).ready(function(){
     $.each(_comodos,function(indexComodo,comodo){
       auxIndex = 0;
       valor = 0;
-      console.log(comodo.nome)
       $.each(_listaStatusDispositivoHistorico,function(){
         //Elemento Atual
         var item = $(this).data('item',auxIndex);
@@ -120,14 +119,11 @@ $(document).ready(function(){
         
         if(comodo.id == item[0].idComodo && prox != undefined ){
           if(item[0].idDispositivo != prox.idDispositivo){
-            console.log(item[0].id, prox.id)
           }
           //Verifica se o dispositivo é válido
           if(teste != item[0].id && prox.id != item[0].id && 
             prox.idDispositivo == item[0].idDispositivo && item[0].estado != prox.estado){
             teste = prox.id;
-            console.log("item atual: ", item[0].id,item[0].estado, item[0].gasto)
-            console.log("Proximo item: ", prox.id,prox.estado, prox.gasto)
             var d1 = new Date(item[0].data)
             var d2 = new Date(prox.data)
             var calcDatas = CalculaHorasEntreDatas(d1, d2);
@@ -137,10 +133,39 @@ $(document).ready(function(){
         }
         auxIndex ++;
       });
-      _chartData.push({name:comodo.nome,data:[valor]});
+      _chartData.push({id:comodo.id,name:comodo.nome,data:[valor]});
     });
     Horizontal_Chart(_chartData,'Gráfico mensal por cômodo');
-  }); 
+  });
+  
+  // Barra de progresso do consumo por cômodo
+  socket.on("getAlarmes",function(alarmes){
+    if(alarmes.length > 0){      
+      $.each(alarmes,function(indexAlarme,alarme){
+        $.each(_chartData,function(inddexData,item){
+          if(alarme.id == item.id){
+            var result = ProgressoConsumo(alarme.limite,item.data);
+            var cor = "";
+            result = result.toFixed(2);
+            if(result < 20){
+              cor="aqua";
+            }
+            else if(result >= 20 && result <= 50){
+              cor = "green";
+            }
+            else if(result > 50 && result <= 79){
+              cor = "yellow"
+            }
+
+            else if(result >= 80){
+              cor = "red"
+            }
+            $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-'+cor+'" role="progressbar" aria-valuemax="100" style="width: '+result+'%"></div></div></div>')
+          }
+        })
+      });
+    }
+  });
 
   // -------------------------------------------------- COMODO SELECIONADO ----------------------------------------------------  
  

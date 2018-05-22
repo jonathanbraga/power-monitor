@@ -98,6 +98,12 @@ io.on('connection', function (client) {
         io.emit("getStatusDispositivoComodoByMonth",result);
     });
 
+    // Recebe todos os alarmes de comoddo
+    con.query("SELECT c.id as id, c.nome as nome, al.limite as limite FROM comodo c, alarme al WHERE c.id = al.comodo_id ORDER BY c.nome;",function(err,result,field){
+        if(err) throw err;
+        io.emit("getAlarmes",result);
+    })
+
     //Get Comodo selecionado
     con.query("SELECT c.id,c.nome from comodo c, selected_comodo sc where c.id = sc.comodo_id", function (err, result, fields) {
         if (err) throw err;
@@ -123,7 +129,7 @@ io.on('connection', function (client) {
         io.emit("getConfiguracao", result);
     });
     //Recebe todos os comodos que não possuem alarmes
-    con.query("SELECT c.nome,c.id FROM comodo c, alarme al WHERE c.id != al.comodo_id ORDER BY c.nome;", function(err,result,fields){
+    con.query("SELECT c.id,c.nome FROM comodo c where c.id not in (select alarme.comodo_id from alarme ) ORDER BY c.nome;", function(err,result,fields){
         if(err) throw err;
         io.emit("getComodosSemAlarme",result);
     });
