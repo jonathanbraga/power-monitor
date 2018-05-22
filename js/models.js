@@ -54,3 +54,10 @@ function Alarme(id,comodoID,limite,created){
     this.created = created || new Date();
 }
 
+// Configuracao
+function Configuracao(id,tarifa,gasto_mensal,created){
+    this.id = id || 0;
+    this.tarifa = tarifa || 0 ;
+    this.gasto_mensal = gasto_mensal || 0;
+    this.created = created || new Date();
+}

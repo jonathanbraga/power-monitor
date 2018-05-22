@@ -117,6 +117,11 @@ io.on('connection', function (client) {
         io.emit("get-status-dispositivos-comodo",result);
     });
 
+    //Recebe todos os parâmetros de configuração
+    con.query("SELECT * FROM configuracao;", function(err,result,field){
+        if(err)throw err;
+        io.emit("getConfiguracao", result);
+    });
     //Recebe todos os comodos que não possuem alarmes
     con.query("SELECT c.nome,c.id FROM comodo c, alarme al WHERE c.id != al.comodo_id ORDER BY c.nome;", function(err,result,fields){
         if(err) throw err;

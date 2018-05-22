@@ -66,7 +66,6 @@ CREATE TABLE notification(
     PRIMARY KEY (id)
 );
 
-
 CREATE TABLE alarme(
     id int auto_increment,
     comodo_id int,
@@ -74,4 +73,12 @@ CREATE TABLE alarme(
     created DATETIME,
     PRIMARY KEY (id),
     FOREIGN KEY (comodo_id) REFERENCES comodo(id)
+);
+
+CREATE TABLE configuracao(
+    id int auto_increment,
+    tarifa DOUBLE,
+    gasto_mensal DOUBLE,
+    created DATETIME,
+    PRIMARY KEY (id)
 );

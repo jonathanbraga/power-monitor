@@ -142,27 +142,21 @@
             <div class="form-group">
               <label for="inputNome" class="col-sm-2 control-label">Tarifa cobrada por Kwh</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputNome" placeholder="Tarifa">
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="inputNome" class="col-sm-2 control-label">Nome do usuário</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputNome" placeholder="Usuário">
+                <input type="text" class="form-control" id="inputTarifa" placeholder="Tarifa">
               </div>
             </div>
 
             <div class="form-group">
               <label for="inputNome" class="col-sm-2 control-label">Espectativa de gasto mensal</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputNome" placeholder="Valor em R$">
+                <input type="text" class="form-control" id="inputGastoMensal" placeholder="Valor em R$">
               </div>
             </div>
 
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info pull-right">Confirmar</button>            
+            <button type="submit" class="btn btn-info pull-right" id="criarParametro"></button>
+            <a class="btn btn-warning pull-left" id="editaParametro">Editar</a>
           </div>
         </form>
       </div>
