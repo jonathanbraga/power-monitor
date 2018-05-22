@@ -46,3 +46,11 @@ function Notification(id,message,isRead,created){
     this.created = created || new Date();
 }
 
+//ALARME
+function Alarme(id,comodoID,limite,created){
+    this.id = id || 0;
+    this.comodoID = comodoID || 0;
+    this.limite = limite || 0;
+    this.created = created || new Date();
+}
+

@@ -116,7 +116,13 @@ io.on('connection', function (client) {
         if(err) throw err;
         io.emit("get-status-dispositivos-comodo",result);
     });
-    
+
+    //Recebe todos os comodos que não possuem alarmes
+    con.query("SELECT c.nome,c.id FROM comodo c, alarme al WHERE c.id != al.comodo_id ORDER BY c.nome;", function(err,result,fields){
+        if(err) throw err;
+        io.emit("getComodosSemAlarme",result);
+    });
+
     //Qualquer SQL
     client.on("general-sql", function (sql) {
         con.query(sql, function (err, result, fields) {

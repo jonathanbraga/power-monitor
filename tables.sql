@@ -65,3 +65,13 @@ CREATE TABLE notification(
     created DATETIME,
     PRIMARY KEY (id)
 );
+
+
+CREATE TABLE alarme(
+    id int auto_increment,
+    comodo_id int,
+    limite int,
+    created DATETIME,
+    PRIMARY KEY (id),
+    FOREIGN KEY (comodo_id) REFERENCES comodo(id)
+);
