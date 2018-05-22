@@ -61,6 +61,10 @@ router.get("/comodo_selected", function (req, res) {
 router.get("/settings", function (req, res) {
     res.sendFile(__dirname + "/settings.html");
 });
+// rota lista alarme
+router.get("/list_alarme", function (req, res) {
+    res.sendFile(__dirname + "/list_alarme.html");
+});
 
 
 app.use("/", router);
@@ -99,7 +103,7 @@ io.on('connection', function (client) {
     });
 
     // Recebe todos os alarmes de comoddo
-    con.query("SELECT c.id as id, c.nome as nome, al.limite as limite FROM comodo c, alarme al WHERE c.id = al.comodo_id ORDER BY c.nome;",function(err,result,field){
+    con.query("SELECT c.id as id, c.nome as nome, al.limite as limite, al.id as alarme_id FROM comodo c, alarme al WHERE c.id = al.comodo_id ORDER BY c.nome;",function(err,result,field){
         if(err) throw err;
         io.emit("getAlarmes",result);
     })

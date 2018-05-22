@@ -25,6 +25,7 @@ function HoraDataFormatada(){
   return date;
 }
 
+// Calcula a porcentagem do consumo por comodo
 function ProgressoConsumo(limite,gasto){
   var result = (gasto*100)/limite;
   return result;
