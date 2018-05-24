@@ -139,12 +139,16 @@ $(document).ready(function(){
   });
   
   // Barra de progresso do consumo por cômodo
+  var saveDataLimite = new Array();
   socket.on("getAlarmes",function(alarmes){
-    if(alarmes.length > 0){      
+    $("#aviso-painel").empty();
+    if(alarmes.length > 0){  
+      //Limpa a div onde aparece os paineis para evitar duplicidade de dados    
       $.each(alarmes,function(indexAlarme,alarme){
         $.each(_chartData,function(inddexData,item){
           if(alarme.id == item.id){
             var result = ProgressoConsumo(alarme.limite,item.data);
+            saveDataLimite.push({idAlarme:alarme.id, limite: alarme.limite, idComodo: item.id, nomeComodo:item.name ,porcentagemGasto: result.toFixed(2)});
             var cor = "";
             result = result.toFixed(2);
             if(result < 20){
@@ -154,16 +158,19 @@ $(document).ready(function(){
               cor = "green";
             }
             else if(result > 50 && result <= 79){
+              $("#aviso-painel").append(PanelWarning(result,item.name));
               cor = "yellow"
             }
 
             else if(result >= 80){
+              $("#aviso-painel").append(PanelDanger(result,item.name));
               cor = "red"
             }
-            $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-'+cor+'" role="progressbar" aria-valuemax="100" style="width: '+result+'%"></div></div></div>')
+            $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - R$ '+alarme.limite+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-'+cor+'" role="progressbar" aria-valuemax="100" style="width: '+result+'%"></div></div></div>')
           }
         })
-      });
+      });      
+      $.cookie("LimiteComodos", JSON.stringify(saveDataLimite));
     }
   });
 

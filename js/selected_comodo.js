@@ -20,6 +20,21 @@ $(document).ready(function(){
   
   //Receb todas as notificações
   socket.on("get-notifications",function(item){
+    //Listagem dos paineis de aviso
+    var limiteComodos = $.parseJSON($.cookie("LimiteComodos"));
+    $.each(limiteComodos,function(index,item){
+
+      if(item.porcentagemGasto > 50 && item.porcentagemGasto <= 79){
+        $("#aviso-painel").append(PanelWarning(item.porcentagemGasto,item.nomeComodo));
+        cor = "yellow"
+      }
+
+      else if(item.porcentagemGasto >= 80){
+        $("#aviso-painel").append(PanelDanger(item.porcentagemGasto,item.nomeComodo));
+        cor = "red"
+      }
+    });
+
     //Número em desta das mensagens
     $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
     //informação complementar ao abrir o quadro de notificações
