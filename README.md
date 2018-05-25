@@ -1,6 +1,8 @@
 # Power-monitor
 A low-cost solution to monitor power
 
+![](images/1.png)
+
 ## Database scheme
 ![](images/db.png)
 

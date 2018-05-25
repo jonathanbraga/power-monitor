@@ -46,3 +46,18 @@ function Notification(id,message,isRead,created){
     this.created = created || new Date();
 }
 
+//ALARME
+function Alarme(id,comodoID,limite,created){
+    this.id = id || 0;
+    this.comodoID = comodoID || 0;
+    this.limite = limite || 0;
+    this.created = created || new Date();
+}
+
+// Configuracao
+function Configuracao(id,tarifa,gasto_mensal,created){
+    this.id = id || 0;
+    this.tarifa = tarifa || 0 ;
+    this.gasto_mensal = gasto_mensal || 0;
+    this.created = created || new Date();
+}

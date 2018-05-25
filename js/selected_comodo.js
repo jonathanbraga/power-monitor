@@ -20,6 +20,21 @@ $(document).ready(function(){
   
   //Receb todas as notificações
   socket.on("get-notifications",function(item){
+    //Listagem dos paineis de aviso
+    var limiteComodos = $.parseJSON($.cookie("LimiteComodos"));
+    $.each(limiteComodos,function(index,item){
+
+      if(item.porcentagemGasto > 50 && item.porcentagemGasto <= 79){
+        $("#aviso-painel").append(PanelWarning(item.porcentagemGasto,item.nomeComodo));
+        cor = "yellow"
+      }
+
+      else if(item.porcentagemGasto >= 80){
+        $("#aviso-painel").append(PanelDanger(item.porcentagemGasto,item.nomeComodo));
+        cor = "red"
+      }
+    });
+
     //Número em desta das mensagens
     $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
     //informação complementar ao abrir o quadro de notificações
@@ -138,23 +153,27 @@ $(document).ready(function(){
 
   });
 
-  //Lista dos dispositivos adicionados ao comodo
+  //adiciona a lista dos dispositivos do comodo
   $("#adicionar-dispositivo").click(function(){
-    moreone = moreone + 1;
-    var data = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    var quantidade =  $("#inputQuantidade").val();
-    var dispositivo =  $( "#select-dispositivo option:selected" ).text();
-    var dispositivo_id = $( "#select-dispositivo option:selected" ).val();
-    $('#tabela-dispositivos tr:last').after('<tr><td>'+dispositivo+'</td><td>'+quantidade+'</td><td><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this)">Excluir</button></td>');
-    if(moreone > 1){
-      _sqlAdd = _sqlAdd + ",("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+","+_selectedComodoID+")";
+    if($("#inputQuantidade")[0].value != ""){
+      moreone = moreone + 1;
+      var data = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      var quantidade =  $("#inputQuantidade").val();
+      var dispositivo =  $( "#select-dispositivo option:selected" ).text();
+      var dispositivo_id = $( "#select-dispositivo option:selected" ).val();
+      $('#tabela-dispositivos tr:last').after('<tr><td>'+dispositivo+'</td><td>'+quantidade+'</td><td><button type="button" class="btn btn-block btn-danger btn-xs" onclick="remove(this)">Excluir</button></td>');
+      if(moreone > 1){
+        _sqlAdd = _sqlAdd + ",("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
+        _sqlAddStatus = _sqlAddStatus + ",(0,"+dispositivo_id+","+_selectedComodoID+")";
+      }
+      else{
+        _sqlAdd = "("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
+        _sqlAddStatus = "(0,"+dispositivo_id+","+_selectedComodoID+")";
+      }
+      $("#inputQuantidade").val("");
+    }else{
+      alert("Insira a quantidade")
     }
-    else{
-      _sqlAdd = "("+quantidade+", "+_selectedComodoID+", "+dispositivo_id+")"
-      _sqlAddStatus = "(0,"+dispositivo_id+","+_selectedComodoID+")";
-    }
-    $("#inputQuantidade").val("");
   });
 
   //Adiciona dispostivo ao comodo selecionado

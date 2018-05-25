@@ -107,10 +107,12 @@
                 <li><a href="/list_dispositivo">Listar</a></li>
               </ul>
             </li>
+            <li><a href="/settings"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
             <li class="header">Principal</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="/"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
-            <li><a href="relatorio.html"><i class="fa fa-area-chart"></i> <span>Relatórios</span></a></li>            
+            <li><a href="/"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
+            <li><a href="relatorio.html"><i class="fa fa-area-chart"></i> <span>Relatórios</span></a></li>   
+                     
           </ul>
           <!-- /.sidebar-menu -->
         </section>
@@ -207,6 +209,7 @@
     </section>
     <!-- Main content -->
     <section class="content container-fluid">
+        <div id="aviso-painel"></div>
         <!-- Application buttons -->
         <div class="row">
           <div class="col-md-8">
@@ -269,8 +272,10 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="js/models.js"></script>
 <script src="js/HelperCalculos.js"></script>
+<script src="js/globalData.js"></script>
 <script src="js/charts.js"></script>
 <script src="js/selected_comodo.js"></script>
 </body>

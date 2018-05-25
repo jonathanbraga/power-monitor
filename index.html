@@ -122,6 +122,7 @@
               </li>
             </ul>
           </li>
+          <li><a href="/settings"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>  
           <li class="header">Principal</li>
           <!-- Optionally, you can add icons to the links -->
           <li class="active">
@@ -135,7 +136,7 @@
               <i class="fa fa-area-chart"></i>
               <span>Relatórios</span>
             </a>
-          </li>
+          </li>          
         </ul>
         <!-- /.sidebar-menu -->
       </section>
@@ -150,20 +151,32 @@
           Home
         </h1>
       </section>
-
       <!-- Main content -->
       <section class="content container-fluid">
-        <!-- Application buttons -->
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title">Cômodos</h3>
-          </div>
-          <div class="box-body" id="box-comodos">
-          </div>
-        </div>
+          <div id="aviso-painel"></div>
         <div class="row">
-          <div class="col-md-12">
-            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          <div class="col-md-8">            
+            <!-- Application buttons -->
+            <div class="box">
+              <div class="box-header">
+                <h3 class="box-title">Cômodos</h3>
+              </div>
+              <div class="box-body" id="box-comodos">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="box">
+              <div class="box-header">
+                <h3>Progresso de gastos</h3>
+              </div>
+              <div id="box-progress"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -197,8 +210,10 @@
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
   <script src="js/models.js"></script>
   <script src="js/HelperCalculos.js"></script>
+  <script src="js/globalData.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/home.js"></script>
 
