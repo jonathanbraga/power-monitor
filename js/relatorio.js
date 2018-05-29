@@ -27,6 +27,7 @@ $(document).ready(function(){
         });
     });
 
+    var lastNextItemID = 0;
     socket.on("getExtratoGeral",function(result){
         //Montagem dos dados que serão utilizados
         $.each(result,function(index,item){
@@ -41,11 +42,30 @@ $(document).ready(function(){
 
         $.each(_comodoList,function(indexc,comodo){
             console.log(comodo.nome)
-            $.each(_dispositivoLlist,function(indexd,dispositivo){                
-                $.each(_statusDispositivoHistoricoList,function(index,item){
-                    if(item.idComodo == comodo.id && item.idDispositivo == dispositivo.id){
-                        console.log(item.idComodo,item.idDispositivo);
+            $.each(_dispositivoLlist,function(indexd,dispositivo){
+                var auxCount = 0;                
+                $.each(_statusDispositivoHistoricoList,function(){
+
+                    var item = $(this).data('item',auxCount)[0];
+                    
+                    var auxNext = auxCount + 1;
+                    var prox = [];
+
+                    if(auxNext <= _statusDispositivoHistoricoList.length){
+                        prox = _statusDispositivoHistoricoList[auxNext];
                     }
+                    
+                    if(prox != undefined &&
+                        lastNextItemID != item.id && 
+                        item.idComodo == comodo.id && 
+                        item.idDispositivo == dispositivo.id){
+                        
+                        lastNextItemID = prox.id;
+                        console.log("atual:" + item.id,"proximo:" + prox.id);
+                        //console.log(item.idComodo,item.idDispositivo);
+                    }
+
+                    auxCount ++;
                 });
             });
         });
