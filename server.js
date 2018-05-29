@@ -65,6 +65,10 @@ router.get("/settings", function (req, res) {
 router.get("/list_alarme", function (req, res) {
     res.sendFile(__dirname + "/list_alarme.html");
 });
+// rota relatórios
+router.get("/relatorio", function (req, res) {
+    res.sendFile(__dirname + "/relatorio.html");
+});
 
 
 app.use("/", router);
@@ -173,4 +177,22 @@ io.on('connection', function (client) {
         });
     });
 
+    //Consultas referente a construção do extrato
+    con.query("SELECT * FROM comodo order by id;", 
+    function(err,result,field){
+        if(err) throw err;
+        io.emit("getComodos",result);
+    });
+
+    con.query("SELECT * FROM dispositivo order by id;", 
+    function(err,result,field){
+        if(err) throw err;
+        io.emit("getDispositivos",result);
+    });
+
+    con.query("SELECT * FROM status_dispositivo_historico ORDER BY id_comodo,id_dispositivo,data;", 
+    function(err,result,field){
+        if(err) throw err;
+        io.emit("getExtratoGeral",result);
+    });
 });
