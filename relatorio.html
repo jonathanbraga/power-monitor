@@ -136,42 +136,22 @@
     <section class="content container-fluid">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Extrato Geral</h3>
+          <h2 class="box-title">Extrato Geral</h2>
         </div>
-        <div class="box-body no-padding">
+        <div class="box-body no-padding" id="extrado-body">
           <div class="row">
-            <div class="col-md-12"> 
-              <h2 class="page-header" style="margin-left: 10px;">Quarto</h2>
+            <div class="col-md-12">
+              <table class="table table-striped" id="list-extrato">
+                <tr>
+                  <th>Comodo</th>
+                  <th>Dispositivo</th>
+                  <th>Data ao ligar</th>
+                  <th>Data ao desligar</th>
+                  <th>Tempo de consumo</th>
+                  <th>Consumo</th>
+                </tr>
+            </table>
             </div>
-          </div>
-          <div class="col-md-12"> 
-              <h4 style="margin-left: 10px;"><b>Televisão</b></h4>
-          </div>
-          <div class="col-md-12"> 
-            <h4 style="margin-left: 10px;">Mês de Janeiro</h4>
-        </div>
-          <div class="col-md-12">
-            <table class="table table-striped">
-              <tbody><tr>
-                <th>Status</th>
-                <th>Data e Hora</th>
-                <th>Status</th>
-                <th>Data e Hora</th>
-                <th>Tempo de consumo</th>
-                <th>Consumo</th>
-              </tr>
-              <tr>
-                <td>1.</td>
-                <td>Update software</td>
-                <td>
-                  <div class="progress progress-xs">
-                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                  </div>
-                </td>
-                <td><span class="badge bg-red">55%</span></td>
-              </tr>
-            </tbody>
-          </table>
           </div>
         </div>
         </div>
@@ -202,6 +182,7 @@
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.min.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="js/models.js"></script>

@@ -4,6 +4,7 @@
   "description": "A low-cost solution to monitor power",
   "main": "server.js",
   "dependencies": {
+    "date-fns": "^1.29.0",
     "express": "^4.16.2",
     "express-static": "^1.2.5",
     "moment": "^2.22.1",

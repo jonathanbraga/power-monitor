@@ -6,6 +6,7 @@ $(document).ready(function(){
     var _comodoList = new Array();
     var _dispositivo = new Dispositivo();
     var _dispositivoLlist = new Array();
+    var _listExtrato = new Array();
 
     socket.on("getComodos",function(result){
         $.each(result,function(index,item){
@@ -28,6 +29,10 @@ $(document).ready(function(){
     });
 
     var lastNextItemID = 0;
+    var verifica = 0;
+    var saveOldData = new Array();
+    var saveOldDataDispositivo = new Array();
+    var valorAtualID = 0;
     socket.on("getExtratoGeral",function(result){
         //Montagem dos dados que serão utilizados
         $.each(result,function(index,item){
@@ -40,8 +45,14 @@ $(document).ready(function(){
             _stdh = new StatusDispositivoHistorico();
         });
 
-        $.each(_comodoList,function(indexc,comodo){
-            console.log(comodo.nome)
+        var extrato = new Extrato();
+        var testeArray = new Array();
+        var nomeDispositivo = "";
+        var listaFiltradaDispositivo;
+        var t = new Array();
+        var listaFinal = new Array();
+
+        $.each(_comodoList,function(indexc,comodo){            
             $.each(_dispositivoLlist,function(indexd,dispositivo){
                 var auxCount = 0;                
                 $.each(_statusDispositivoHistoricoList,function(){
@@ -50,7 +61,7 @@ $(document).ready(function(){
                     
                     var auxNext = auxCount + 1;
                     var prox = [];
-
+                    
                     if(auxNext <= _statusDispositivoHistoricoList.length){
                         prox = _statusDispositivoHistoricoList[auxNext];
                     }
@@ -59,12 +70,36 @@ $(document).ready(function(){
                         lastNextItemID != item.id && 
                         item.idComodo == comodo.id && 
                         item.idDispositivo == dispositivo.id){
-                        
+                            
                         lastNextItemID = prox.id;
-                        console.log("atual:" + item.id,"proximo:" + prox.id);
-                        //console.log(item.idComodo,item.idDispositivo);
-                    }
+                        var resultTempoDecorrido = dateFns.distanceInWordsStrict(item.data,prox.data);
+                        
+                        var estadoAtual = "Sem status";
+                        var estadoProx = "Sem status";
 
+                        var dataAtual = GenericaHoraDataFormatada(item.data);
+                        var dataProx = GenericaHoraDataFormatada(prox.data);
+
+                        if(item.estado == 0){
+                            estadoAtual = "Ligado"
+                        }else{
+                            estadoAtual = "Desligado"
+                        }
+
+                        if(prox.estado == 0){
+                            estadoProx = "Ligado"
+                        }else{
+                            estadoProx = "Desligado"
+                        }
+
+
+                        var diffData = CalculaHorasEntreDatas(item.data,prox.data);
+                        var resultConsumo = CalculaConsumoDispositivo(diffData,dispositivo.gasto);
+
+                        var html = '<tr><td>'+comodo.nome+'</td><td>'+dispositivo.nome+'</td><td>'+dataAtual+'</td><td>'+dataProx+'</td><td>'+resultTempoDecorrido+'</td><td>R$ '+resultConsumo.toFixed(3).replace('.',',')+'</td></tr>'
+                        $("#list-extrato tr:last").after(html)
+
+                    }
                     auxCount ++;
                 });
             });

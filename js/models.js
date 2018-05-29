@@ -61,3 +61,11 @@ function Configuracao(id,tarifa,gasto_mensal,created){
     this.gasto_mensal = gasto_mensal || 0;
     this.created = created || new Date();
 }
+
+// Extrato
+function Extrato(itemAtual,proxItem,tempoConsumo,consumo){
+    this.itemAtual = itemAtual || new Dispositivo();
+    this.proxItem = proxItem || new Dispositivo();
+    this.tempoConsumo = tempoConsumo || "";
+    this.consumo = consumo || "";
+}

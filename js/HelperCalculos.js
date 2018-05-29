@@ -30,3 +30,10 @@ function ProgressoConsumo(limite,gasto){
   var result = (gasto*100)/limite;
   return result;
 }
+
+function GenericaHoraDataFormatada(data){
+  var tzoffset = (new Date(data)).getTimezoneOffset() * 60000; //offset in milliseconds
+  var date = (new Date(data - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
+
+  return date;
+}
