@@ -1,3 +1,10 @@
+var vrf_get_comodo = 0;
+var vrf_get_dispositivos_on = 0;
+var vrf_get_notifications = 0;
+var vrf_notifications = 0;
+var vrf_getStatusDispositivoComodoByMonth = 0;
+var vrf_getAlarmes = 0;
+
 $(document).ready(function(){
   var socket = io.connect("http://localhost:8000");
   var ready = false;
@@ -15,7 +22,12 @@ $(document).ready(function(){
 
     //Receb todas as notificações
     socket.on("get-notifications",function(item){
-      console.log(item);
+      vrf_get_notifications++;
+
+      if(vrf_get_notifications > 1){
+        return;
+      }
+
       //Número em desta das mensagens
       $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
       //informação complementar ao abrir o quadro de notificações
@@ -29,6 +41,11 @@ $(document).ready(function(){
   
     // Lista de notificação
     $("#notifications").click(function(){
+      vrf_notifications ++;
+
+      if(vrf_notifications > 1){
+        return;
+      }
       console.log(_idNotificacao.length)
       if(_idNotificacao.length != 0){
         var sql_update_notification = "UPDATE notification set isRead = true IN ("+_idNotificacao+");";
@@ -39,6 +56,12 @@ $(document).ready(function(){
     });
 
   socket.on("get-dispositivos-on",function(r){
+    vrf_get_dispositivos_on ++;
+
+    if(vrf_get_dispositivos_on > 1){
+      return;
+    }
+
     $.each(r,function(index,value){
       statusDispositivo.id = value.id;
       statusDispositivo.estado = value.estado;
@@ -51,6 +74,13 @@ $(document).ready(function(){
   
   //Recebe todos os dispositivos
   socket.on("get-comodos",function(d){
+    vrf_get_comodo++;
+
+    if(vrf_get_comodo > 1){
+      console.log("entrei");
+      return;
+    }
+
     var st_on = 0;
     $.each(d,function(indexComodo,comodo){
       _comodos.push({id:comodo.id,nome:comodo.nome})
@@ -87,6 +117,12 @@ $(document).ready(function(){
   });
 
   socket.on("getStatusDispositivoComodoByMonth",function(result){
+    vrf_getStatusDispositivoComodoByMonth ++;
+
+    if(vrf_getStatusDispositivoComodoByMonth > 1){
+      return;
+    }
+
     $.each(result,function(index,item){
       _statusDispositivoHistorico.id = item.id;
       _statusDispositivoHistorico.idComodo = item.id_comodo;
@@ -141,6 +177,12 @@ $(document).ready(function(){
   // Barra de progresso do consumo por cômodo
   var saveDataLimite = new Array();
   socket.on("getAlarmes",function(alarmes){
+
+    if(vrf_getStatusDispositivoComodoByMonth > 1){
+      return;
+    }
+
+
     $("#aviso-painel").empty();
     if(alarmes.length > 0){  
       //Limpa a div onde aparece os paineis para evitar duplicidade de dados    

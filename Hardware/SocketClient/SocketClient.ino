@@ -1,13 +1,13 @@
-#include <SocketIOClient.h>
+#include <SocketIoClient.h>
 #define LedPin 2
 
-const char* ssid = "Braga";
+const char* ssid = "Bragas";
 const char* password = "1co13131";
 
-SocketIOClient socket;
+SocketIoClient socket;
 const char HexLookup[17] = "0123456789ABCDEF";
 
-String host = "192.168.0.27";
+String host = "192.168.0.32";
 int port = 8000;
 
 void setupNetwork() {
@@ -37,8 +37,13 @@ void setupNetwork() {
 
 
 void led(String state) {
+  
   Serial.println("[led] " + state);
+  Serial.println("-----------------------------------------------------------");
+  Serial.println(state);
+  Serial.println("-----------------------------------------------------------");
   if (state == "\"state\":true") {
+    socket.emit("general-sql","\"INSERT INTO Teste_ESP (mensagem) VALUES (\"Jonathan\");\"");
     Serial.println("[led] aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
     digitalWrite(LED_BUILTIN, LOW);
   }
@@ -61,9 +66,10 @@ void setup() {
   setupNetwork();    
 
   socket.on("led", led);
+  
   socket.connect(host, port);
 }
 
 void loop() {
-  socket.monitor();  
+  socket.monitor();    
 }

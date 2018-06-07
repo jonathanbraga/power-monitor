@@ -1,3 +1,4 @@
+var vrf = 0;
 $(document).ready(function(){
     var socket = io.connect("http://localhost:8000");
     var _statusDispositivoHistoricoList = new Array();
@@ -34,6 +35,10 @@ $(document).ready(function(){
     var saveOldDataDispositivo = new Array();
     var valorAtualID = 0;
     socket.on("getExtratoGeral",function(result){
+        vrf ++;
+        if(vrf > 1){
+            return;
+        }
         //Montagem dos dados que serão utilizados
         $.each(result,function(index,item){
             _stdh.id = item.id;
