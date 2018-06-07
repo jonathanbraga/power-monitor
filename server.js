@@ -72,9 +72,18 @@ router.get("/relatorio", function (req, res) {
 
 
 app.use("/", router);
-
+var light = {state:""};
 //Main connection
 io.on('connection', function (client) {
+
+    //Recebe os dados do ESP
+    client.on('toggle', function(result) {
+        console.log('id: ' + client.id + ' light: ' + result.data);
+        var sql = 'INSERT INTO Teste_ESP (mensagem) VALUES ("'+result.data+'");';
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+        });
+      });
 
     // Get todas as notificações
     con.query("SELECT * FROM notification WHERE isRead = false ORDER BY created DESC;",function(err,result,fields){
