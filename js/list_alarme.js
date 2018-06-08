@@ -10,7 +10,7 @@ $(document).ready(function(){
         // listagem das notificações
         $.each(item,function(index,item){
             $("#lista-notificacao").append('<ul class="menu"> <li> <a href="#"> <i class="fa fa-users text-aqua"></i> '+item.message+' </a></li></ul>')
-            _idNotificacao.push(item.id);
+            //_idNotificacao.push(item.id);
         });
     });
 

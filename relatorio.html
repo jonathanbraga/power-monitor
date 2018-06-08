@@ -14,6 +14,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -134,27 +135,42 @@
 
     <!-- Main content -->
     <section class="content container-fluid">
-      <div class="box">
-        <div class="box-header">
-          <h2 class="box-title">Extrato Geral</h2>
-        </div>
-        <div class="box-body no-padding" id="extrado-body">
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-striped" id="list-extrato">
-                <tr>
-                  <th>Comodo</th>
-                  <th>Dispositivo</th>
-                  <th>Data ao ligar</th>
-                  <th>Data ao desligar</th>
-                  <th>Tempo de consumo</th>
-                  <th>Consumo</th>
-                </tr>
-            </table>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header">
+              <h2 class="box-title">Extrato Geral</h2>
+            </div>
+            <div class="box-body no-padding" id="extrado-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="display" id="list-extrato">
+                    <thead>
+                      <tr>
+                        <th>Comodo</th>
+                        <th>Dispositivo</th>
+                        <th>Data ao ligar</th>
+                        <th>Data ao desligar</th>
+                        <th>Tempo de consumo</th>
+                        <th>Consumo</th>
+                      </tr>
+                    </thead>
+                </table>
+                </div>
+              </div>
             </div>
           </div>
+          <div class="col-md-12">
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          </div>
+          <div class="col-md-12" style="margin-top: 10px;">
+              <div id="containerr" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          </div>
+          <div class="col-md-12" style="margin-top: 10px;">
+              <div id="chart-device-current-month" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          </div>
         </div>
-        </div>
+      </div>
       </div>
     </section>
     <!-- /.content -->
@@ -183,8 +199,13 @@
 <script src="dist/js/adminlte.min.js"></script>
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/af.js"></script>
+
 <script src="js/models.js"></script>
 <script src="js/HelperCalculos.js"></script>
 <script src="js/globalData.js"></script>

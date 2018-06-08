@@ -1,3 +1,5 @@
+var vrf = 0;
+
 $(document).ready(function(){
     var socket = io.connect("http://localhost:8000");
     var _alarme = new Alarme();
@@ -71,6 +73,12 @@ $(document).ready(function(){
 
     //Recebe todos os comodos e adiciona no select
     socket.on("getComodosSemAlarme",function(d){
+        vrf++;
+
+        if(vrf > 1){
+            return;
+        }
+        
         for(i=0; i<d.length;i++){
             $('#select-comodo').append($('<option>', { 
             value: d[i].id,

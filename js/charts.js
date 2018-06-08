@@ -46,3 +46,72 @@ function Horizontal_Chart(_chartData,title){
         series: _chartData
       });
 }
+
+function Line_Chart(idDiv,_chartData,title){
+    Highcharts.chart(''+idDiv+'', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: title
+        },
+        xAxis: {
+            categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dec'],
+            title:{
+                text:"MÊSES DO ANO"
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Consumo (R$)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: _chartData
+    });
+}
+
+var days = [];
+var cont = 1;
+for(i = 0; i< 31;i++){
+    days[i] = ''+cont+'';
+    cont++;
+}
+
+function Line_Chart_Days(idDiv,_chartData,title){
+    Highcharts.chart(''+idDiv+'', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: title
+        },
+        xAxis: {
+            categories: days,
+            title:{
+                text: 'DIAS DO MÊS'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Consumo (R$)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: _chartData
+    });
+}
