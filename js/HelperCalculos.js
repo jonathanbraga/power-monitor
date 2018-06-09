@@ -17,6 +17,13 @@ function CalculaConsumoDispositivo (horas,consumoDispositivo){
     return consumoTotal;
 }
 
+//Calcula o consumo no mês(30 dias) de um dispositivo
+function CalculaConsumoDispositivoCompleto (horas,consumoDispositivo,tarifa){
+  var consumoTotal = (consumoDispositivo * horas)/720;
+  consumoTotal = consumoTotal * tarifa;
+  return consumoTotal;
+}
+
 // Formata a hora e a data para o banco de dados
 function HoraDataFormatada(){
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
@@ -36,4 +43,9 @@ function GenericaHoraDataFormatada(data){
   var date = (new Date(data - tzoffset)).toISOString().slice(0, 19).replace('T', ' ');
 
   return date;
+}
+
+//Transforma dias em horas
+function DayToHour(day){
+  return day*24;
 }
