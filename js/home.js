@@ -179,6 +179,7 @@ $(document).ready(function(){
       globatalValorTotal = globatalValorTotal + item.data[0];
     });
 
+    $("#total-gasto").append('<div class="box-body"><div class="clearfix"><h4>R$ '+globatalValorTotal.toFixed(2)+'</h4></div></div>')
     
     Horizontal_Chart(_chartData,'Gráfico mensal por cômodo');
   });
