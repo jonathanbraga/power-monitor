@@ -1,7 +1,7 @@
 # Power-monitor
 O power monitor é uma solução simples e eficiente para o monitoramento de energia elétrica. Focado em facilidade a plataforma foi desenvolvida pensando em uma fácil comunicação com qualquer hardware. Usando comunicação `websocket` a plataforma disponibiliza alguns end-point para a obtenção e cadastro dos dados.
 
-![](images/1.png)
+![](images/principal.png)
 
 ## Database scheme
 ![](images/diagrama.png)
@@ -69,5 +69,9 @@ Por fim, vá no arquivo `tables.sql` copie tudo e cole no terminal.
 Pronto! agora basta rodar a nossa aplicação
 
 `nodejs server.js`
+
+
+
+* Todos os gráficos são feitos usando a biblioteca highcharts, em caso de dúvida veja o arquivo `LICENSE.txt`.
 
 
