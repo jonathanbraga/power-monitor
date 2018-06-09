@@ -32,18 +32,16 @@ $(document).ready(function(){
 
     //Listagem dos paineis de aviso
     var limiteComodos = $.parseJSON($.cookie("LimiteComodos"));
-    $.each(limiteComodos,function(index,item){
 
-      if(item.porcentagemGasto > 50 && item.porcentagemGasto <= 79){
-        $("#aviso-painel").append(PanelWarning(item.porcentagemGasto,item.nomeComodo));
-        cor = "yellow"
-      }
+    if(limiteComodos[0].porcentagemGasto > 50 && limiteComodos[0].porcentagemGasto <= 79){
+      $("#aviso-painel").append(PanelWarning(limiteComodos[0].porcentagemGasto,''));
+      cor = "yellow"
+    }
 
-      else if(item.porcentagemGasto >= 80){
-        $("#aviso-painel").append(PanelDanger(item.porcentagemGasto,item.nomeComodo));
-        cor = "red"
-      }
-    });
+    else if(limiteComodos[0].porcentagemGasto >= 80){
+      $("#aviso-painel").append(PanelDanger(limiteComodos[0].porcentagemGasto,''));
+      cor = "red"
+    }
 
     //Número em desta das mensagens
     $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
@@ -167,7 +165,8 @@ $(document).ready(function(){
             teste = prox.id;
             var calcDatas = CalculaHorasEntreDatas(item[0].data, prox.data);
             var result = CalculaConsumoDispositivo(calcDatas,dispositivo.gasto);
-            valor = valor + result;
+            valor = valor + Number(result.toFixed(2));
+            valor = Number(valor.toFixed(2));
           }
         }
         auxIndex ++;

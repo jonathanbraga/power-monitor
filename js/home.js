@@ -167,7 +167,7 @@ $(document).ready(function(){
             var d2 = new Date(prox.data)
             var calcDatas = CalculaHorasEntreDatas(d1, d2);
             var result = CalculaConsumoDispositivo(calcDatas,item[0].gasto);
-            valor = valor + result;            
+            valor = valor + Number(result.toFixed(2));           
           }
         }
         auxIndex ++;
@@ -195,7 +195,7 @@ $(document).ready(function(){
       if(result[0].gasto_mensal > 0){
         $.cookie("gastoMensal", JSON.stringify(result[0].gasto_mensal));
       }else{
-        $.cookie("gastoMensal", JSON.stringify(0));
+        $.cookie("gastoMensal", null);
       }
     }
   });
@@ -220,8 +220,8 @@ $(document).ready(function(){
     else if(resultGastoTotal >= 20 && resultGastoTotal <= 50){
       cor = "green";
     }
-    else if(resultGastoTotal > 50 && resultGastoTotal <= 79){
-      $("#aviso-painel").append(PanelWarning(resultGastoTotal,''));
+    else if(resultGastoTotal >= 50 && resultGastoTotal <= 79){
+      $("#aviso-painel").append(PanelWarning(resultGastoTotal.toFixed(2),''));
       cor = "yellow"
     }
 
@@ -230,29 +230,25 @@ $(document).ready(function(){
       cor = "red"
     }
 
+    //Prepara o HTML
     painelHtml = '<div class="box-body"><div class="clearfix"><span class="pull-left">Prvisão de gasto mensal - R$ '+gastoTotal+'</span><span class="pull-right">'+resultGastoTotal.toFixed(2)+'%</span></div><div class="progress"><div class="progress-bar progress-bar-'+cor+'" role="progressbar" aria-valuemax="100" style="width: '+resultGastoTotal.toFixed(2)+'%"></div></div></div>';
     $("#box-progress-total").append(painelHtml);
     $("#box-progress-total").append('<div class="box-body"><div class="clearfix"><span class="pull-left"> <b>Gastos em relação a espectativa mensal</b></span></div>');
+    //Ordena o array pelo ID
+    _chartData.sort(function(a,b){return a.id - b.id});
+    //Ordena o array pelo ID
+    alarmes.sort(function(a,b){return a.id - b.id});  
+    // Salva dado em cash
+    $.cookie("LimiteComodos",null)
+    saveDataLimite.push({porcentagemGasto: resultGastoTotal.toFixed(2)});
+    $.cookie("LimiteComodos", JSON.stringify(saveDataLimite));
     
-    if(alarmes.length > 0){
-      _chartData.sort(function(a,b){return a.id - b.id});
-      alarmes.sort(function(a,b){return a.id - b.id});  
-      //Limpa a div onde aparece os paineis para evitar duplicidade de dados    
-      $.each(alarmes,function(indexAlarme,alarme){
-        $.each(_chartData,function(inddexData,item){
-          if(alarme.id == item.id){
+    $.each(_chartData,function(inddexData,item){
+      var result = ProgressoConsumo(gastoTotal,item.data);
 
-            var result = ProgressoConsumo(gastoTotal,item.data);
-            saveDataLimite.push({idAlarme:alarme.id, limite: alarme.limite, idComodo: item.id, nomeComodo:item.name ,porcentagemGasto: result.toFixed(2)});
-
-            result = result.toFixed(2);
-
-            $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - '+item.valorFormatado+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemax="100" style="width: '+item.data+'%"></div></div></div>')
-          }
-        })
-      });      
-      $.cookie("LimiteComodos", JSON.stringify(saveDataLimite));
-    }
+      result = result.toFixed(2);
+      $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - '+item.valorFormatado+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemax="100" style="width: '+item.data+'%"></div></div></div>')        
+    });
   });
 
   // -------------------------------------------------- COMODO SELECIONADO ----------------------------------------------------  
