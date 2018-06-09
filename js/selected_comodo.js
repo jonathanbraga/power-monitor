@@ -1,3 +1,7 @@
+var vrf_getnotifications = 0;
+var vrf_notifications = 0;
+var vrf_get_dispositivos_selected_comodo = 0;
+var vrf_get_status_dispositivos_comodo = 0;
 $(document).ready(function(){
   var socket = io.connect("http://localhost:8000");
   var ready = false;
@@ -20,20 +24,24 @@ $(document).ready(function(){
   
   //Receb todas as notificações
   socket.on("get-notifications",function(item){
+    vrf_getnotifications ++;
+
+    if(vrf_getnotifications >1){
+      return;
+    }
+
     //Listagem dos paineis de aviso
     var limiteComodos = $.parseJSON($.cookie("LimiteComodos"));
-    $.each(limiteComodos,function(index,item){
 
-      if(item.porcentagemGasto > 50 && item.porcentagemGasto <= 79){
-        $("#aviso-painel").append(PanelWarning(item.porcentagemGasto,item.nomeComodo));
-        cor = "yellow"
-      }
+    if(limiteComodos[0].porcentagemGasto > 50 && limiteComodos[0].porcentagemGasto <= 79){
+      $("#aviso-painel").append(PanelWarning(limiteComodos[0].porcentagemGasto,''));
+      cor = "yellow"
+    }
 
-      else if(item.porcentagemGasto >= 80){
-        $("#aviso-painel").append(PanelDanger(item.porcentagemGasto,item.nomeComodo));
-        cor = "red"
-      }
-    });
+    else if(limiteComodos[0].porcentagemGasto >= 80){
+      $("#aviso-painel").append(PanelDanger(limiteComodos[0].porcentagemGasto,''));
+      cor = "red"
+    }
 
     //Número em desta das mensagens
     $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
@@ -48,6 +56,12 @@ $(document).ready(function(){
 
   // Lista de notificação
   $("#notifications").click(function(){
+    vrf_notifications ++; 
+
+    if(vrf_notifications > 1){
+      return;
+    }
+
     if(_idNotificacao.length != 0){
       var sql_update_notification = "UPDATE notification set isRead = true IN ("+_idNotificacao+");";
       socket.emit("general-sql",sql_update_notification);      
@@ -65,6 +79,13 @@ $(document).ready(function(){
 
   //Recebe todos os dispositivos do comodo selecionado
   socket.on("get-dispositivos-selected-comodo",function(d){
+    vrf_get_dispositivos_selected_comodo ++;
+
+    if(vrf_get_dispositivos_selected_comodo >1)
+    {
+      return;
+    }
+
     var icone;
     var status = "";
     var status_color = "";
@@ -107,6 +128,10 @@ $(document).ready(function(){
 
   //Dados para o gŕafico
   socket.on("get-status-dispositivos-comodo",function(result){
+    vrf_get_status_dispositivos_comodo ++;
+    if(vrf_get_status_dispositivos_comodo > 1){
+      return;
+    }
     $.each(result, function(index,value){
       _statusDispositivoHistorico.id = value.id;
       _statusDispositivoHistorico.estado = value.estado;
@@ -140,7 +165,8 @@ $(document).ready(function(){
             teste = prox.id;
             var calcDatas = CalculaHorasEntreDatas(item[0].data, prox.data);
             var result = CalculaConsumoDispositivo(calcDatas,dispositivo.gasto);
-            valor = valor + result;
+            valor = valor + Number(result.toFixed(2));
+            valor = Number(valor.toFixed(2));
           }
         }
         auxIndex ++;
@@ -210,7 +236,7 @@ $(document).ready(function(){
 
     //adiciona o valor em status_dispositivo_historico
     var sql_create_on = "INSERT INTO status_dispositivo_historico (estado,data,id_dispositivo,id_comodo) VALUES (1,'"+date+"',"+_selectedDispositivoID+", "+_selectedComodoID+")"
-    socket.emit("general-sql",sql_create_on,1);  
+    socket.emit("status-dispositivo",sql_create_on,1);  
     location.reload();
   });
 

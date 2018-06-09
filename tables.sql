@@ -82,3 +82,12 @@ CREATE TABLE configuracao(
     created DATETIME,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE alarme_total(
+    id int auto_increment,
+    nome VARCHAR(255),
+    limite int,
+    month int,
+    created_at DATETIME,
+    PRIMARY KEY (id)
+);

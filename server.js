@@ -65,12 +65,25 @@ router.get("/settings", function (req, res) {
 router.get("/list_alarme", function (req, res) {
     res.sendFile(__dirname + "/list_alarme.html");
 });
+// rota relatórios
+router.get("/relatorio", function (req, res) {
+    res.sendFile(__dirname + "/relatorio.html");
+});
 
 
 app.use("/", router);
-
+var light = {state:""};
 //Main connection
 io.on('connection', function (client) {
+
+    //Recebe os dados do ESP
+    client.on('toggle', function(result) {
+        console.log('id: ' + client.id + ' light: ' + result.data);
+        var sql = 'INSERT INTO Teste_ESP (mensagem) VALUES ("'+result.data+'");';
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+        });
+      });
 
     // Get todas as notificações
     con.query("SELECT * FROM notification WHERE isRead = false ORDER BY created DESC;",function(err,result,fields){
@@ -102,6 +115,12 @@ io.on('connection', function (client) {
         io.emit("getStatusDispositivoComodoByMonth",result);
     });
 
+        //Recebe todos os parâmetros de configuração
+        con.query("SELECT * FROM configuracao;", function(err,result,field){
+            if(err)throw err;
+            io.emit("getConfiguracao", result);
+        });
+
     // Recebe todos os alarmes de comoddo
     con.query("SELECT c.id as id, c.nome as nome, al.limite as limite, al.id as alarme_id FROM comodo c, alarme al WHERE c.id = al.comodo_id ORDER BY c.nome;",function(err,result,field){
         if(err) throw err;
@@ -127,11 +146,7 @@ io.on('connection', function (client) {
         io.emit("get-status-dispositivos-comodo",result);
     });
 
-    //Recebe todos os parâmetros de configuração
-    con.query("SELECT * FROM configuracao;", function(err,result,field){
-        if(err)throw err;
-        io.emit("getConfiguracao", result);
-    });
+
     //Recebe todos os comodos que não possuem alarmes
     con.query("SELECT c.id,c.nome FROM comodo c where c.id not in (select alarme.comodo_id from alarme ) ORDER BY c.nome;", function(err,result,fields){
         if(err) throw err;
@@ -173,4 +188,22 @@ io.on('connection', function (client) {
         });
     });
 
+    //Consultas referente a construção do extrato
+    con.query("SELECT * FROM comodo order by id;", 
+    function(err,result,field){
+        if(err) throw err;
+        io.emit("getComodos",result);
+    });
+
+    con.query("SELECT * FROM dispositivo order by id;", 
+    function(err,result,field){
+        if(err) throw err;
+        io.emit("getDispositivos",result);
+    });
+
+    con.query("SELECT * FROM status_dispositivo_historico ORDER BY id_comodo,id_dispositivo,data;", 
+    function(err,result,field){
+        if(err) throw err;
+        io.emit("getExtratoGeral",result);
+    });
 });

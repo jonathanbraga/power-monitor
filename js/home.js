@@ -1,3 +1,13 @@
+var vrf_get_comodo = 0;
+var vrf_get_dispositivos_on = 0;
+var vrf_get_notifications = 0;
+var vrf_notifications = 0;
+var vrf_getStatusDispositivoComodoByMonth = 0;
+var vrf_getConfiguracao = 0;
+var vrf_getAlarmes = 0;
+
+var globatalValorTotal = 0;
+
 $(document).ready(function(){
   var socket = io.connect("http://localhost:8000");
   var ready = false;
@@ -15,7 +25,12 @@ $(document).ready(function(){
 
     //Receb todas as notificações
     socket.on("get-notifications",function(item){
-      console.log(item);
+      vrf_get_notifications++;
+
+      if(vrf_get_notifications > 1){
+        return;
+      }
+
       //Número em desta das mensagens
       $("#count-message").append('<span class="label label-warning"><label id="count">'+item.length+'</label></span>')
       //informação complementar ao abrir o quadro de notificações
@@ -29,6 +44,11 @@ $(document).ready(function(){
   
     // Lista de notificação
     $("#notifications").click(function(){
+      vrf_notifications ++;
+
+      if(vrf_notifications > 1){
+        return;
+      }
       console.log(_idNotificacao.length)
       if(_idNotificacao.length != 0){
         var sql_update_notification = "UPDATE notification set isRead = true IN ("+_idNotificacao+");";
@@ -39,6 +59,12 @@ $(document).ready(function(){
     });
 
   socket.on("get-dispositivos-on",function(r){
+    vrf_get_dispositivos_on ++;
+
+    if(vrf_get_dispositivos_on > 1){
+      return;
+    }
+
     $.each(r,function(index,value){
       statusDispositivo.id = value.id;
       statusDispositivo.estado = value.estado;
@@ -51,6 +77,13 @@ $(document).ready(function(){
   
   //Recebe todos os dispositivos
   socket.on("get-comodos",function(d){
+    vrf_get_comodo++;
+
+    if(vrf_get_comodo > 1){
+      console.log("entrei");
+      return;
+    }
+
     var st_on = 0;
     $.each(d,function(indexComodo,comodo){
       _comodos.push({id:comodo.id,nome:comodo.nome})
@@ -87,6 +120,12 @@ $(document).ready(function(){
   });
 
   socket.on("getStatusDispositivoComodoByMonth",function(result){
+    vrf_getStatusDispositivoComodoByMonth ++;
+
+    if(vrf_getStatusDispositivoComodoByMonth > 1){
+      return;
+    }
+
     $.each(result,function(index,item){
       _statusDispositivoHistorico.id = item.id;
       _statusDispositivoHistorico.idComodo = item.id_comodo;
@@ -128,50 +167,88 @@ $(document).ready(function(){
             var d2 = new Date(prox.data)
             var calcDatas = CalculaHorasEntreDatas(d1, d2);
             var result = CalculaConsumoDispositivo(calcDatas,item[0].gasto);
-            valor = valor + result;
+            valor = valor + Number(result.toFixed(2));           
           }
         }
         auxIndex ++;
       });
-      _chartData.push({id:comodo.id,name:comodo.nome,data:[valor]});
+      _chartData.push({id:comodo.id,name:comodo.nome,data:[valor],valorFormatado: valor.toFixed(2)});
     });
+
+    $.each(_chartData, function(i,item){
+      globatalValorTotal = globatalValorTotal + item.data[0];
+    });
+
+    
     Horizontal_Chart(_chartData,'Gráfico mensal por cômodo');
   });
   
   // Barra de progresso do consumo por cômodo
+  socket.on("getConfiguracao",function(result){
+    vrf_getConfiguracao ++;
+    
+    if(vrf_getConfiguracao > 1){
+      return;
+    }
+    
+    if(result.length > 0){
+      if(result[0].gasto_mensal > 0){
+        $.cookie("gastoMensal", JSON.stringify(result[0].gasto_mensal));
+      }else{
+        $.cookie("gastoMensal", null);
+      }
+    }
+  });
+  
   var saveDataLimite = new Array();
   socket.on("getAlarmes",function(alarmes){
-    $("#aviso-painel").empty();
-    if(alarmes.length > 0){  
-      //Limpa a div onde aparece os paineis para evitar duplicidade de dados    
-      $.each(alarmes,function(indexAlarme,alarme){
-        $.each(_chartData,function(inddexData,item){
-          if(alarme.id == item.id){
-            var result = ProgressoConsumo(alarme.limite,item.data);
-            saveDataLimite.push({idAlarme:alarme.id, limite: alarme.limite, idComodo: item.id, nomeComodo:item.name ,porcentagemGasto: result.toFixed(2)});
-            var cor = "";
-            result = result.toFixed(2);
-            if(result < 20){
-              cor="aqua";
-            }
-            else if(result >= 20 && result <= 50){
-              cor = "green";
-            }
-            else if(result > 50 && result <= 79){
-              $("#aviso-painel").append(PanelWarning(result,item.name));
-              cor = "yellow"
-            }
-
-            else if(result >= 80){
-              $("#aviso-painel").append(PanelDanger(result,item.name));
-              cor = "red"
-            }
-            $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - R$ '+alarme.limite+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-'+cor+'" role="progressbar" aria-valuemax="100" style="width: '+result+'%"></div></div></div>')
-          }
-        })
-      });      
-      $.cookie("LimiteComodos", JSON.stringify(saveDataLimite));
+    
+    if(vrf_getStatusDispositivoComodoByMonth > 1){
+      return;
     }
+    
+    $("#aviso-painel").empty();
+    var gastoTotal =  $.parseJSON($.cookie("gastoMensal"));
+    var painelHtml = '';
+    var resultGastoTotal = ProgressoConsumo(gastoTotal,globatalValorTotal);
+
+
+    var cor = "";
+    if(resultGastoTotal < 20){
+      cor="aqua";
+    }
+    else if(resultGastoTotal >= 20 && resultGastoTotal <= 50){
+      cor = "green";
+    }
+    else if(resultGastoTotal >= 50 && resultGastoTotal <= 79){
+      $("#aviso-painel").append(PanelWarning(resultGastoTotal.toFixed(2),''));
+      cor = "yellow"
+    }
+
+    else if(resultGastoTotal >= 80){
+      $("#aviso-painel").append(PanelDanger(resultGastoTotal,''));
+      cor = "red"
+    }
+
+    //Prepara o HTML
+    painelHtml = '<div class="box-body"><div class="clearfix"><span class="pull-left">Prvisão de gasto mensal - R$ '+gastoTotal+'</span><span class="pull-right">'+resultGastoTotal.toFixed(2)+'%</span></div><div class="progress"><div class="progress-bar progress-bar-'+cor+'" role="progressbar" aria-valuemax="100" style="width: '+resultGastoTotal.toFixed(2)+'%"></div></div></div>';
+    $("#box-progress-total").append(painelHtml);
+    $("#box-progress-total").append('<div class="box-body"><div class="clearfix"><span class="pull-left"> <b>Gastos em relação a espectativa mensal</b></span></div>');
+    //Ordena o array pelo ID
+    _chartData.sort(function(a,b){return a.id - b.id});
+    //Ordena o array pelo ID
+    alarmes.sort(function(a,b){return a.id - b.id});  
+    // Salva dado em cash
+    $.cookie("LimiteComodos",null)
+    saveDataLimite.push({porcentagemGasto: resultGastoTotal.toFixed(2)});
+    $.cookie("LimiteComodos", JSON.stringify(saveDataLimite));
+    
+    $.each(_chartData,function(inddexData,item){
+      var result = ProgressoConsumo(gastoTotal,item.data);
+
+      result = result.toFixed(2);
+      $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - '+item.valorFormatado+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemax="100" style="width: '+item.data+'%"></div></div></div>')        
+    });
   });
 
   // -------------------------------------------------- COMODO SELECIONADO ----------------------------------------------------  
