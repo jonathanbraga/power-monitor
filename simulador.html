@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Powe Monitor</title>
+  <title>Simulador</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -52,6 +52,9 @@
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li>
+          <!-- Tasks Menu -->
+          
+          <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
             <a>
@@ -112,138 +115,83 @@
             <!-- Optionally, you can add icons to the links -->
             <li><a href="/"><i class="fa fa-dashboard"></i> <span>Home</span></a></li>
             <li><a href="/relatorio"><i class="fa fa-area-chart"></i> <span>Relatórios</span></a></li>
-            <li><a href="/simulador"><i class="fa fa-sitemap"></i> <span>Simulador</span></a></li>   
-                     
+            <li class="active"><a href="/simulador"><i class="fa fa-sitemap"></i> <span>Simulador</span></a></li>
+            
           </ul>
           <!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
       </aside>
 
-  <div class="modal fade" id="modal-dispositivo">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Opções do Dispositivo</h4>
-        </div>
-        <div class="modal-body">
-          <div class="row">          
-            <div class="col-md-6">
-              <h4>Ligar ou Desligar</h4>
+      <div class="modal fade" id="modal-resultado">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Resultado da simulação</h4>
             </div>
-            <div class="col-md-3">
-              <button type="button" class="btn btn-block btn-success btn-sm" data-dismiss="modal" id="onDispositivo">Ligar</button>
-            </div>
-            <div class="col-md-3">
-                <button type="button" class="btn btn-block btn-warning btn-sm" data-dismiss="modal" id="offDispositivo">Desligar</button>
-              </div>
+            <div class="modal-body" id="body-resultado"></div>
           </div>
-        </div>        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteDispositivo">Deletar dipositivo</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" >Fechar</button>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="modal fade" id="modal-default">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Vincular Dispositivo ao Cômodo</h4>
-        </div>
-        <div class="modal-body">
-          <p> 
-            <h3><label for="titleComodo"></label></h3>
-          </p>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="inputQuantidade" class="col-sm-2 control-label">Quantidade</label>
-              <div class="col-sm-2">
-                  <input type="text" id="inputQuantidade" class="form-control" placeholder="Quantidade"></select>
-              </div>
-              <label for="select-dispositivo" class="col-sm-1 control-label">Dispositivo</label>
-              <div class="col-sm-5">
-                  <select id="select-dispositivo" class="form-control select2" style="width: 100%;"></select>
-              </div>
-              <div class="col-sm-2">
-                <button type="button" class="btn btn-info pull" id="adicionar-dispositivo">Adicionar</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12" style="margin-top:20px;margin-bottom:20px;">
-              <div class="box">
-                  <div class="box-header">
-                    <h3 class="box-title">Dispositivos Adicionados</h3>
-                  </div>
-                  <div class="box-body no-padding">
-                    <table class="table table-striped" id="tabela-dispositivos">
-                      <tr>
-                        <th>Dispositivo</th>
-                        <th>Quantidade</th>
-                        <th style="width: 40px">#</th>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" id="addDispositivoComodo">Confirmar</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <label for="titleComodo"></label>
+        Simulador de Gastos
       </h1>
     </section>
+
     <!-- Main content -->
     <section class="content container-fluid">
-        <div id="aviso-painel"></div>
-        <!-- Application buttons -->
-        <div class="row">
-          <div class="col-md-8">
-              <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Dispositivos</h3>
-                </div>
-                <div class="box-body" id="box-dispositivos"></div>
+
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">Parâmetros</h3>
+        </div>
+        <form class="form-horizontal" id="form-comodo">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="inputNome" class="col-sm-2 control-label">Consumo do aparelho (Kwh)</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="consumoAparelho" placeholder="Exemplo: 57">
               </div>
-          </div> 
-          <div class="col-md-4">
-              <div class="box box-success box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Opções</h3>
-                </div>
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <Label>Vincular Dispositivo</Label>
-                    </div>
-                    <div class="col-md-6">
-                      <button class="btn btn-block btn-primary btn-xs" type="button" data-toggle="modal" data-target="#modal-default">+</button>
-                    </div>
-                  </div>
-                </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputNome" class="col-sm-2 control-label">Espectativa de uso em horas ao longo do dia</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="horasUsadas" placeholder="Exemplo: 12">
               </div>
-            </div>       
-        </div>   
-        <div class="row">
-          <div class="col-md-12">
-            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputNome" class="col-sm-2 control-label">Espectativa de uso em dias ao longo do mês</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="diasUsados" placeholder="Exemplo: 20">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputNome" class="col-sm-2 control-label">Tarifa cobrada pela concessionária</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="tarifa" placeholder="Exemplo: 0.35">
+              </div>
+            </div>
+
           </div>
-        </div>     
+          <div class="box-footer">
+            <a type="submit" class="btn btn-info pull-right" id="calcular">Calcular</a>
+          </div>
+        </form>
+        *No lugar da <b>vírgula</b> usar o <b>ponto</b>.
+      </div>      
+      <!-- /.box -->
+    </div>
+
     </section>
     <!-- /.content -->
   </div>
@@ -270,14 +218,12 @@
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="js/models.js"></script>
 <script src="js/HelperCalculos.js"></script>
-<script src="js/globalData.js"></script>
-<script src="js/charts.js"></script>
-<script src="js/selected_comodo.js"></script>
+<script src="js/simulador.js"></script>
+
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. -->
 </body>
 </html>

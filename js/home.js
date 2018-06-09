@@ -248,7 +248,7 @@ $(document).ready(function(){
       var result = ProgressoConsumo(gastoTotal,item.data);
 
       result = result.toFixed(2);
-      $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - '+item.valorFormatado+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemax="100" style="width: '+item.data+'%"></div></div></div>')        
+      $("#box-progress").append('<div class="box-body"><div class="clearfix"><span class="pull-left">'+item.name+' - R$ '+item.valorFormatado+'</span><span class="pull-right">'+result+'%</span></div><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemax="100" style="width: '+item.data+'%"></div></div></div>')        
     });
   });
 

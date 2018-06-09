@@ -18,6 +18,10 @@ function Vertical_Chart(_chartData, title){
                 text: "Dispositivos"
             }
         },
+        tooltip: {
+            valueDecimals: 2,
+            valuePrefix: 'R$ ',
+        },
         plotOptions: {
             column: {
                 pointPadding: 0.2,
@@ -46,6 +50,10 @@ function Horizontal_Chart(_chartData,title){
             title:{
                 text: "Cômodos"
             }
+        },
+        tooltip: {
+            valueDecimals: 2,
+            valuePrefix: 'R$ '
         },
         plotOptions: {
             series: {

@@ -69,6 +69,10 @@ router.get("/list_alarme", function (req, res) {
 router.get("/relatorio", function (req, res) {
     res.sendFile(__dirname + "/relatorio.html");
 });
+// rota simulador
+router.get("/simulador", function (req, res) {
+    res.sendFile(__dirname + "/simulador.html");
+});
 
 
 app.use("/", router);
