@@ -19,7 +19,7 @@ function Vertical_Chart(_chartData, title){
             }
         },
         tooltip: {
-            valueDecimals: 2,
+            valueDecimals: 4,
             valuePrefix: 'R$ ',
         },
         plotOptions: {
@@ -52,7 +52,7 @@ function Horizontal_Chart(_chartData,title){
             }
         },
         tooltip: {
-            valueDecimals: 2,
+            valueDecimals: 4,
             valuePrefix: 'R$ '
         },
         plotOptions: {

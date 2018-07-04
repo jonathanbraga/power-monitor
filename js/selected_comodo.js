@@ -165,8 +165,8 @@ $(document).ready(function(){
             teste = prox.id;
             var calcDatas = CalculaHorasEntreDatas(item[0].data, prox.data);
             var result = CalculaConsumoDispositivo(calcDatas,dispositivo.gasto);
-            valor = valor + Number(result.toFixed(2));
-            valor = Number(valor.toFixed(2));
+            valor = valor + Number(result.toFixed(4));
+            valor = Number(valor.toFixed(4));
           }
         }
         auxIndex ++;

@@ -230,7 +230,7 @@ $(document).ready(function(){
                     }
                 }
             });
-            vetorData = [Number(v1.toFixed(2)),Number(v2.toFixed(2)),Number(v3.toFixed(2)),Number(v4.toFixed(2)),Number(v5.toFixed(2)),Number(v6.toFixed(2)),Number(v7.toFixed(2)),Number(v8.toFixed(2)),Number(v9.toFixed(2)),Number(v10.toFixed(2)),Number(v11.toFixed(2)),Number(v12.toFixed(2))];
+            vetorData = [Number(v1.toFixed(4)),Number(v2.toFixed(4)),Number(v3.toFixed(4)),Number(v4.toFixed(4)),Number(v5.toFixed(4)),Number(v6.toFixed(4)),Number(v7.toFixed(4)),Number(v8.toFixed(4)),Number(v9.toFixed(4)),Number(v10.toFixed(4)),Number(v11.toFixed(4)),Number(v12.toFixed(4))];
             //console.log(vetorData)
             dataFull.push({name:comodo.nome,data:vetorData});
         });
@@ -248,21 +248,21 @@ $(document).ready(function(){
                             var check = 0;
                             $.each(saveday,function(k,day){
                                 if(item.datadia == day.day && item.datahora == day.month){
-                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2)) + Number(item.data.toFixed(2));
-                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2));
+                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4)) + Number(item.data.toFixed(4));
+                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4));
                                     check++;
                                 }
                             });
                             if(check == 0){
-                                vetorDia[item.datadia] = Number(item.data.toFixed(2));
-                                vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2));
+                                vetorDia[item.datadia] = Number(item.data.toFixed(4));
+                                vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4));
                                 saveday.push({month:item.datahora,day:item.datadia})
                                 check = 0;
                             }
                         }else{
                             saveday.push({month:item.datahora,day:item.datadia})
-                            vetorDia[item.datadia] = Number(item.data.toFixed(2));
-                            vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2));
+                            vetorDia[item.datadia] = Number(item.data.toFixed(4));
+                            vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4));
                         }
                     }
                 }
@@ -287,21 +287,21 @@ $(document).ready(function(){
                             var check = 0;
                             $.each(saveday,function(k,day){
                                 if(item.datadia == day.day && item.datahora == day.month){
-                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2)) + Number(item.data.toFixed(2));
-                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2));
+                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4)) + Number(item.data.toFixed(4));
+                                    vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4));
                                     check++;
                                 }
                             });
                             if(check == 0){
-                                vetorDia[item.datadia] = Number(item.data.toFixed(2));
-                                vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2));
+                                vetorDia[item.datadia] = Number(item.data.toFixed(4));
+                                vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4));
                                 saveday.push({month:item.datahora,day:item.datadia})
                                 check = 0;
                             }
                         }else{
                             saveday.push({month:item.datahora,day:item.datadia})
-                            vetorDia[item.datadia] = Number(item.data.toFixed(2));
-                            vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(2));
+                            vetorDia[item.datadia] = Number(item.data.toFixed(4));
+                            vetorDia[item.datadia] = Number(vetorDia[item.datadia].toFixed(4));
                         }
                     }
                 }

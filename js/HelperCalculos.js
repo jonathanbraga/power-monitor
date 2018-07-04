@@ -13,14 +13,14 @@ function CalculaHorasEntreDatas (d1,d2){
 // Calcula o consumo no mês(30 dias) de um dispositivo
 function CalculaConsumoDispositivo (horas,consumoDispositivo){
     var consumoTotal = (consumoDispositivo * horas)/720;
-    consumoTotal = consumoTotal * 0.35;
+    consumoTotal = consumoTotal * 0.48;
     return consumoTotal;
 }
 
 //Calcula o consumo no mês(30 dias) de um dispositivo
 function CalculaConsumoDispositivoCompleto (horas,consumoDispositivo,tarifa){
   var consumoTotal = (consumoDispositivo * horas)/720;
-  consumoTotal = consumoTotal * tarifa;
+  consumoTotal = consumoTotal * 0.48;
   return consumoTotal;
 }
 
